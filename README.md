@@ -1,0 +1,1 @@
+# cp_minitab_scriptgen
