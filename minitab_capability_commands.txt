@@ -27,8 +27,8 @@ Subset;
   Name "SKP500-01".
 Name 'test_value' "SKP500-01".
 Capa 'SKP500-01' 1;
-  Lspec 6.5;
-  Uspec 7.5;
+  Lspec 6,5;
+  Uspec 7,5;
   Pooled;
   AMR;
   UnBiased;
@@ -112,7 +112,7 @@ Subset;
 Name 'test_value' "M400-8".
 Capa 'M400-8' 1;
   Lspec 6;
-  Uspec 8.5;
+  Uspec 8,5;
   Pooled;
   AMR;
   UnBiased;
@@ -216,8 +216,8 @@ Subset;
   Name "M500-6".
 Name 'test_value' "M500-6".
 Capa 'M500-6' 1;
-  Lspec -1.5;
-  Uspec 0.3;
+  Lspec -1,5;
+  Uspec 0,3;
   Pooled;
   AMR;
   UnBiased;
@@ -237,8 +237,8 @@ Subset;
   Name "SKP400-01".
 Name 'test_value' "SKP400-01".
 Capa 'SKP400-01' 1;
-  Lspec 6.5;
-  Uspec 7.5;
+  Lspec 6,5;
+  Uspec 7,5;
   Pooled;
   AMR;
   UnBiased;
@@ -279,8 +279,8 @@ Subset;
   Name "M200-5".
 Name 'test_value' "M200-5".
 Capa 'M200-5' 1;
-  Lspec 7.5;
-  Uspec 8.5;
+  Lspec 7,5;
+  Uspec 8,5;
   Pooled;
   AMR;
   UnBiased;
@@ -300,8 +300,8 @@ Subset;
   Name "M400-5".
 Name 'test_value' "M400-5".
 Capa 'M400-5' 1;
-  Lspec 7.5;
-  Uspec 8.5;
+  Lspec 7,5;
+  Uspec 8,5;
   Pooled;
   AMR;
   UnBiased;
@@ -343,7 +343,7 @@ Subset;
 Name 'test_value' "M700-6".
 Capa 'M700-6' 1;
   Lspec -15;
-  Uspec -7.5;
+  Uspec -7,5;
   Pooled;
   AMR;
   UnBiased;
@@ -384,8 +384,8 @@ Subset;
   Name "M400-6".
 Name 'test_value' "M400-6".
 Capa 'M400-6' 1;
-  Lspec -0.3;
-  Uspec 1.5;
+  Lspec -0,3;
+  Uspec 1,5;
   Pooled;
   AMR;
   UnBiased;
@@ -426,8 +426,8 @@ Subset;
   Name "M700-14-1".
 Name 'test_value' "M700-14-1".
 Capa 'M700-14-1' 1;
-  Lspec 6.75;
-  Uspec 7.75;
+  Lspec 6,75;
+  Uspec 7,75;
   Pooled;
   AMR;
   UnBiased;
@@ -489,7 +489,7 @@ Subset;
   Name "M300-8".
 Name 'test_value' "M300-8".
 Capa 'M300-8' 1;
-  Lspec -8.5;
+  Lspec -8,5;
   Uspec -6;
   Pooled;
   AMR;
@@ -531,8 +531,8 @@ Subset;
   Name "M700-14-2".
 Name 'test_value' "M700-14-2".
 Capa 'M700-14-2' 1;
-  Lspec -7.9;
-  Uspec -6.9;
+  Lspec -7,9;
+  Uspec -6,9;
   Pooled;
   AMR;
   UnBiased;
@@ -636,8 +636,8 @@ Subset;
   Name "M200-6".
 Name 'test_value' "M200-6".
 Capa 'M200-6' 1;
-  Lspec -0.3;
-  Uspec 1.5;
+  Lspec -0,3;
+  Uspec 1,5;
   Pooled;
   AMR;
   UnBiased;
@@ -825,8 +825,8 @@ Subset;
   Name "SKP300-01".
 Name 'test_value' "SKP300-01".
 Capa 'SKP300-01' 1;
-  Lspec 6.5;
-  Uspec 7.5;
+  Lspec 6,5;
+  Uspec 7,5;
   Pooled;
   AMR;
   UnBiased;
@@ -868,7 +868,7 @@ Subset;
 Name 'test_value' "M200-8".
 Capa 'M200-8' 1;
   Lspec 6;
-  Uspec 8.5;
+  Uspec 8,5;
   Pooled;
   AMR;
   UnBiased;
@@ -951,8 +951,8 @@ Subset;
   Name "M500-1".
 Name 'test_value' "M500-1".
 Capa 'M500-1' 1;
-  Lspec -1.5;
-  Uspec 0.3;
+  Lspec -1,5;
+  Uspec 0,3;
   Pooled;
   AMR;
   UnBiased;
@@ -972,8 +972,8 @@ Subset;
   Name "M300-2".
 Name 'test_value' "M300-2".
 Capa 'M300-2' 1;
-  Lspec -1.25;
-  Uspec -0.75;
+  Lspec -1,25;
+  Uspec -0,75;
   Pooled;
   AMR;
   UnBiased;
@@ -993,8 +993,8 @@ Subset;
   Name "M500-2".
 Name 'test_value' "M500-2".
 Capa 'M500-2' 1;
-  Lspec -1.25;
-  Uspec -0.75;
+  Lspec -1,25;
+  Uspec -0,75;
   Pooled;
   AMR;
   UnBiased;
@@ -1036,7 +1036,7 @@ Subset;
 Name 'test_value' "M200-4".
 Capa 'M200-4' 1;
   Lspec 6;
-  Uspec 8.5;
+  Uspec 8,5;
   Pooled;
   AMR;
   UnBiased;
@@ -1099,7 +1099,7 @@ Subset;
 Name 'test_value' "M400-4".
 Capa 'M400-4' 1;
   Lspec 6;
-  Uspec 8.5;
+  Uspec 8,5;
   Pooled;
   AMR;
   UnBiased;
@@ -1120,7 +1120,7 @@ Subset;
 Name 'test_value' "M700-1".
 Capa 'M700-1' 1;
   Lspec 0;
-  Uspec 0.1;
+  Uspec 0,1;
   Pooled;
   AMR;
   UnBiased;
@@ -1182,8 +1182,8 @@ Subset;
   Name "M001-3".
 Name 'test_value' "M001-3".
 Capa 'M001-3' 1;
-  Lspec 12.5;
-  Uspec 13.5;
+  Lspec 12,5;
+  Uspec 13,5;
   Pooled;
   AMR;
   UnBiased;
@@ -1225,7 +1225,7 @@ Subset;
 Name 'test_value' "M700-7".
 Capa 'M700-7' 1;
   Lspec -15;
-  Uspec -7.5;
+  Uspec -7,5;
   Pooled;
   AMR;
   UnBiased;
@@ -1245,8 +1245,8 @@ Subset;
   Name "M300-5".
 Name 'test_value' "M300-5".
 Capa 'M300-5' 1;
-  Lspec -8.5;
-  Uspec -7.5;
+  Lspec -8,5;
+  Uspec -7,5;
   Pooled;
   AMR;
   UnBiased;
@@ -1287,8 +1287,8 @@ Subset;
   Name "M400-1".
 Name 'test_value' "M400-1".
 Capa 'M400-1' 1;
-  Lspec -0.3;
-  Uspec 1.5;
+  Lspec -0,3;
+  Uspec 1,5;
   Pooled;
   AMR;
   UnBiased;
@@ -1329,7 +1329,7 @@ Subset;
   Name "M500-8".
 Name 'test_value' "M500-8".
 Capa 'M500-8' 1;
-  Lspec -8.5;
+  Lspec -8,5;
   Uspec -6;
   Pooled;
   AMR;
@@ -1392,7 +1392,7 @@ Subset;
   Name "M300-4".
 Name 'test_value' "M300-4".
 Capa 'M300-4' 1;
-  Lspec -8.5;
+  Lspec -8,5;
   Uspec -6;
   Pooled;
   AMR;
@@ -1413,7 +1413,7 @@ Subset;
   Name "M500-4".
 Name 'test_value' "M500-4".
 Capa 'M500-4' 1;
-  Lspec -8.5;
+  Lspec -8,5;
   Uspec -6;
   Pooled;
   AMR;
@@ -1455,8 +1455,8 @@ Subset;
   Name "M200-1".
 Name 'test_value' "M200-1".
 Capa 'M200-1' 1;
-  Lspec -0.3;
-  Uspec 1.5;
+  Lspec -0,3;
+  Uspec 1,5;
   Pooled;
   AMR;
   UnBiased;
@@ -1539,7 +1539,7 @@ Subset;
   Name "M700-10".
 Name 'test_value' "M700-10".
 Capa 'M700-10' 1;
-  Lspec 7.5;
+  Lspec 7,5;
   Uspec 15;
   Pooled;
   AMR;
@@ -1560,7 +1560,7 @@ Subset;
   Name "M700-11".
 Name 'test_value' "M700-11".
 Capa 'M700-11' 1;
-  Lspec 7.5;
+  Lspec 7,5;
   Uspec 15;
   Pooled;
   AMR;
@@ -1644,8 +1644,8 @@ Subset;
   Name "M300-1".
 Name 'test_value' "M300-1".
 Capa 'M300-1' 1;
-  Lspec -1.5;
-  Uspec 0.3;
+  Lspec -1,5;
+  Uspec 0,3;
   Pooled;
   AMR;
   UnBiased;
@@ -1665,8 +1665,8 @@ Subset;
   Name "SKP200-01".
 Name 'test_value' "SKP200-01".
 Capa 'SKP200-01' 1;
-  Lspec 6.5;
-  Uspec 7.5;
+  Lspec 6,5;
+  Uspec 7,5;
   Pooled;
   AMR;
   UnBiased;
@@ -1686,8 +1686,8 @@ Subset;
   Name "M300-6".
 Name 'test_value' "M300-6".
 Capa 'M300-6' 1;
-  Lspec -1.5;
-  Uspec 0.3;
+  Lspec -1,5;
+  Uspec 0,3;
   Pooled;
   AMR;
   UnBiased;
@@ -1707,8 +1707,8 @@ Subset;
   Name "M001-2".
 Name 'test_value' "M001-2".
 Capa 'M001-2' 1;
-  Lspec 0.1;
-  Uspec 0.4;
+  Lspec 0,1;
+  Uspec 0,4;
   Pooled;
   AMR;
   UnBiased;

@@ -37,7 +37,7 @@ def format_limit(raw):
     value = float(raw)
     if value == int(value):
         return str(int(value))
-    return repr(value)
+    return repr(value).replace(".", ",")
 
 
 SOURCE_WORKSHEET = "Worksheet 1"
