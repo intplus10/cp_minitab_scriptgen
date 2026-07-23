@@ -16,6 +16,47 @@ import sys
 from collections import defaultdict
 
 
+def prompt_csv_path():
+    import tkinter as tk
+    from tkinter import filedialog
+
+    root = tk.Tk()
+    root.withdraw()
+    path = filedialog.askopenfilename(
+        title="Válaszd ki a bemeneti CSV fájlt",
+        filetypes=[("CSV files", "*.csv"), ("All files", "*.*")],
+    )
+    root.destroy()
+    if not path:
+        print("Nem lett CSV fájl kiválasztva, kilépés.")
+        sys.exit(1)
+    return path
+
+
+def prompt_decimal_separator():
+    import tkinter as tk
+
+    choice = {"value": ","}
+
+    def pick(sep):
+        choice["value"] = sep
+        root.destroy()
+
+    root = tk.Tk()
+    root.title("Tizedes elválasztó")
+    tk.Label(
+        root, text="Milyen tizedes elválasztót használjon a Minitab a Lspec/Uspec értékeknél?",
+        padx=20, pady=10,
+    ).pack()
+    frame = tk.Frame(root, padx=20, pady=10)
+    frame.pack()
+    tk.Button(frame, text="Vessző (6,5)", width=15, command=lambda: pick(",")).pack(side="left", padx=5)
+    tk.Button(frame, text="Pont (6.5)", width=15, command=lambda: pick(".")).pack(side="left", padx=5)
+    root.protocol("WM_DELETE_WINDOW", lambda: pick(choice["value"]))
+    root.mainloop()
+    return choice["value"]
+
+
 def load_test_steps(csv_path):
     values = defaultdict(list)
     limits = {}
@@ -33,11 +74,11 @@ def load_test_steps(csv_path):
     return order, values, limits
 
 
-def format_limit(raw):
+def format_limit(raw, decimal_separator):
     value = float(raw)
     if value == int(value):
         return str(int(value))
-    return repr(value).replace(".", ",")
+    return repr(value).replace(".", decimal_separator)
 
 
 SOURCE_WORKSHEET = "Worksheet 1"
@@ -70,14 +111,24 @@ def build_commands(test_id, lsl, uspec):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("csv_path", help="Path to the tall-table test-data CSV")
+    parser.add_argument(
+        "csv_path", nargs="?",
+        help="Path to the tall-table test-data CSV (omit to pick it via a file dialog)",
+    )
     parser.add_argument(
         "-o", "--output", default="minitab_capability_commands.txt",
         help="Output .txt path (default: %(default)s)",
     )
+    parser.add_argument(
+        "--decimal-separator", choices=[",", "."],
+        help="Decimal separator for Lspec/Uspec (omit to pick it interactively)",
+    )
     args = parser.parse_args()
 
-    order, values, limits = load_test_steps(args.csv_path)
+    csv_path = args.csv_path or prompt_csv_path()
+    decimal_separator = args.decimal_separator or prompt_decimal_separator()
+
+    order, values, limits = load_test_steps(csv_path)
 
     skipped_zero_std = []
     skipped_no_variance = []
@@ -94,8 +145,8 @@ def main():
             continue
 
         lower_raw, upper_raw = limits[test_id]
-        lsl = format_limit(lower_raw)
-        usl = format_limit(upper_raw)
+        lsl = format_limit(lower_raw, decimal_separator)
+        usl = format_limit(upper_raw, decimal_separator)
         blocks.append(build_commands(test_id, lsl, usl))
 
     with open(args.output, "w", encoding="utf-8") as f:
