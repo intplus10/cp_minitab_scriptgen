@@ -44,7 +44,7 @@ def build_commands(test_id, lsl, uspec):
     return (
         "Subset;\n"
         "  Include;\n"
-        f'  EQ \'test_id\' "{test_id}";\n'
+        f'  LT \'test_id\' "{test_id}";\n'
         f'  Name "{test_id}".\n'
         "Capa 'test_value' 1;\n"
         f"  Lspec {lsl};\n"
