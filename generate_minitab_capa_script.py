@@ -40,11 +40,16 @@ def format_limit(raw):
     return repr(value)
 
 
+SOURCE_WORKSHEET = "Worksheet 1"
+
+
 def build_commands(test_id, lsl, uspec):
     return (
+        f'Worksheet "{SOURCE_WORKSHEET}".\n'
         "Subset;\n"
         "  Include;\n"
-        f'  LT \'test_id\' "{test_id}";\n'
+        f'  GE \'test_id\' "{test_id}";\n'
+        f'  LE \'test_id\' "{test_id}";\n'
         f'  Name "{test_id}".\n'
         f'Name \'test_value\' "{test_id}".\n'
         f"Capa '{test_id}' 1;\n"
