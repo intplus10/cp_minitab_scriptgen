@@ -46,7 +46,8 @@ def build_commands(test_id, lsl, uspec):
         "  Include;\n"
         f'  LT \'test_id\' "{test_id}";\n'
         f'  Name "{test_id}".\n'
-        "Capa 'test_value' 1;\n"
+        f'Name \'test_value\' "{test_id}".\n'
+        f"Capa '{test_id}' 1;\n"
         f"  Lspec {lsl};\n"
         f"  Uspec {uspec};\n"
         "  Pooled;\n"

@@ -2,7 +2,8 @@ Subset;
   Include;
   LT 'test_id' "SKP600-72";
   Name "SKP600-72".
-Capa 'test_value' 1;
+Name 'test_value' "SKP600-72".
+Capa 'SKP600-72' 1;
   Lspec 0;
   Uspec 50;
   Pooled;
@@ -20,7 +21,8 @@ Subset;
   Include;
   LT 'test_id' "SKP500-01";
   Name "SKP500-01".
-Capa 'test_value' 1;
+Name 'test_value' "SKP500-01".
+Capa 'SKP500-01' 1;
   Lspec 6.5;
   Uspec 7.5;
   Pooled;
@@ -38,7 +40,8 @@ Subset;
   Include;
   LT 'test_id' "M600-5";
   Name "M600-5".
-Capa 'test_value' 1;
+Name 'test_value' "M600-5".
+Capa 'M600-5' 1;
   Lspec 0;
   Uspec 30;
   Pooled;
@@ -56,7 +59,8 @@ Subset;
   Include;
   LT 'test_id' "SKP600-79";
   Name "SKP600-79".
-Capa 'test_value' 1;
+Name 'test_value' "SKP600-79".
+Capa 'SKP600-79' 1;
   Lspec 0;
   Uspec 50;
   Pooled;
@@ -74,7 +78,8 @@ Subset;
   Include;
   LT 'test_id' "OSKP600-78";
   Name "OSKP600-78".
-Capa 'test_value' 1;
+Name 'test_value' "OSKP600-78".
+Capa 'OSKP600-78' 1;
   Lspec 0;
   Uspec 50;
   Pooled;
@@ -92,7 +97,8 @@ Subset;
   Include;
   LT 'test_id' "M400-8";
   Name "M400-8".
-Capa 'test_value' 1;
+Name 'test_value' "M400-8".
+Capa 'M400-8' 1;
   Lspec 6;
   Uspec 8.5;
   Pooled;
@@ -110,7 +116,8 @@ Subset;
   Include;
   LT 'test_id' "SKP600-13";
   Name "SKP600-13".
-Capa 'test_value' 1;
+Name 'test_value' "SKP600-13".
+Capa 'SKP600-13' 1;
   Lspec 0;
   Uspec 20;
   Pooled;
@@ -128,7 +135,8 @@ Subset;
   Include;
   LT 'test_id' "SKP400-04";
   Name "SKP400-04".
-Capa 'test_value' 1;
+Name 'test_value' "SKP400-04".
+Capa 'SKP400-04' 1;
   Lspec 43;
   Uspec 85;
   Pooled;
@@ -146,7 +154,8 @@ Subset;
   Include;
   LT 'test_id' "SKP600-73";
   Name "SKP600-73".
-Capa 'test_value' 1;
+Name 'test_value' "SKP600-73".
+Capa 'SKP600-73' 1;
   Lspec 0;
   Uspec 50;
   Pooled;
@@ -164,7 +173,8 @@ Subset;
   Include;
   LT 'test_id' "SKP600-78";
   Name "SKP600-78".
-Capa 'test_value' 1;
+Name 'test_value' "SKP600-78".
+Capa 'SKP600-78' 1;
   Lspec 0;
   Uspec 50;
   Pooled;
@@ -182,7 +192,8 @@ Subset;
   Include;
   LT 'test_id' "M500-6";
   Name "M500-6".
-Capa 'test_value' 1;
+Name 'test_value' "M500-6".
+Capa 'M500-6' 1;
   Lspec -1.5;
   Uspec 0.3;
   Pooled;
@@ -200,7 +211,8 @@ Subset;
   Include;
   LT 'test_id' "SKP400-01";
   Name "SKP400-01".
-Capa 'test_value' 1;
+Name 'test_value' "SKP400-01".
+Capa 'SKP400-01' 1;
   Lspec 6.5;
   Uspec 7.5;
   Pooled;
@@ -218,7 +230,8 @@ Subset;
   Include;
   LT 'test_id' "OSKP600-70";
   Name "OSKP600-70".
-Capa 'test_value' 1;
+Name 'test_value' "OSKP600-70".
+Capa 'OSKP600-70' 1;
   Lspec 0;
   Uspec 50;
   Pooled;
@@ -236,7 +249,8 @@ Subset;
   Include;
   LT 'test_id' "M200-5";
   Name "M200-5".
-Capa 'test_value' 1;
+Name 'test_value' "M200-5".
+Capa 'M200-5' 1;
   Lspec 7.5;
   Uspec 8.5;
   Pooled;
@@ -254,7 +268,8 @@ Subset;
   Include;
   LT 'test_id' "M400-5";
   Name "M400-5".
-Capa 'test_value' 1;
+Name 'test_value' "M400-5".
+Capa 'M400-5' 1;
   Lspec 7.5;
   Uspec 8.5;
   Pooled;
@@ -272,7 +287,8 @@ Subset;
   Include;
   LT 'test_id' "SKP500-04";
   Name "SKP500-04".
-Capa 'test_value' 1;
+Name 'test_value' "SKP500-04".
+Capa 'SKP500-04' 1;
   Lspec 43;
   Uspec 85;
   Pooled;
@@ -290,7 +306,8 @@ Subset;
   Include;
   LT 'test_id' "M700-6";
   Name "M700-6".
-Capa 'test_value' 1;
+Name 'test_value' "M700-6".
+Capa 'M700-6' 1;
   Lspec -15;
   Uspec -7.5;
   Pooled;
@@ -308,7 +325,8 @@ Subset;
   Include;
   LT 'test_id' "OSKP600-77";
   Name "OSKP600-77".
-Capa 'test_value' 1;
+Name 'test_value' "OSKP600-77".
+Capa 'OSKP600-77' 1;
   Lspec 0;
   Uspec 50;
   Pooled;
@@ -326,7 +344,8 @@ Subset;
   Include;
   LT 'test_id' "M400-6";
   Name "M400-6".
-Capa 'test_value' 1;
+Name 'test_value' "M400-6".
+Capa 'M400-6' 1;
   Lspec -0.3;
   Uspec 1.5;
   Pooled;
@@ -344,7 +363,8 @@ Subset;
   Include;
   LT 'test_id' "M500-9";
   Name "M500-9".
-Capa 'test_value' 1;
+Name 'test_value' "M500-9".
+Capa 'M500-9' 1;
   Lspec 157;
   Uspec 220;
   Pooled;
@@ -362,7 +382,8 @@ Subset;
   Include;
   LT 'test_id' "M700-14-1";
   Name "M700-14-1".
-Capa 'test_value' 1;
+Name 'test_value' "M700-14-1".
+Capa 'M700-14-1' 1;
   Lspec 6.75;
   Uspec 7.75;
   Pooled;
@@ -380,7 +401,8 @@ Subset;
   Include;
   LT 'test_id' "OSKP600-76";
   Name "OSKP600-76".
-Capa 'test_value' 1;
+Name 'test_value' "OSKP600-76".
+Capa 'OSKP600-76' 1;
   Lspec 0;
   Uspec 50;
   Pooled;
@@ -398,7 +420,8 @@ Subset;
   Include;
   LT 'test_id' "SKP300-04";
   Name "SKP300-04".
-Capa 'test_value' 1;
+Name 'test_value' "SKP300-04".
+Capa 'SKP300-04' 1;
   Lspec 43;
   Uspec 85;
   Pooled;
@@ -416,7 +439,8 @@ Subset;
   Include;
   LT 'test_id' "M300-8";
   Name "M300-8".
-Capa 'test_value' 1;
+Name 'test_value' "M300-8".
+Capa 'M300-8' 1;
   Lspec -8.5;
   Uspec -6;
   Pooled;
@@ -434,7 +458,8 @@ Subset;
   Include;
   LT 'test_id' "M600-0";
   Name "M600-0".
-Capa 'test_value' 1;
+Name 'test_value' "M600-0".
+Capa 'M600-0' 1;
   Lspec 8;
   Uspec 12;
   Pooled;
@@ -452,7 +477,8 @@ Subset;
   Include;
   LT 'test_id' "M700-14-2";
   Name "M700-14-2".
-Capa 'test_value' 1;
+Name 'test_value' "M700-14-2".
+Capa 'M700-14-2' 1;
   Lspec -7.9;
   Uspec -6.9;
   Pooled;
@@ -470,7 +496,8 @@ Subset;
   Include;
   LT 'test_id' "M600-3";
   Name "M600-3".
-Capa 'test_value' 1;
+Name 'test_value' "M600-3".
+Capa 'M600-3' 1;
   Lspec 0;
   Uspec 30;
   Pooled;
@@ -488,7 +515,8 @@ Subset;
   Include;
   LT 'test_id' "SKP600-12";
   Name "SKP600-12".
-Capa 'test_value' 1;
+Name 'test_value' "SKP600-12".
+Capa 'SKP600-12' 1;
   Lspec 0;
   Uspec 20;
   Pooled;
@@ -506,7 +534,8 @@ Subset;
   Include;
   LT 'test_id' "SKP600-75";
   Name "SKP600-75".
-Capa 'test_value' 1;
+Name 'test_value' "SKP600-75".
+Capa 'SKP600-75' 1;
   Lspec 0;
   Uspec 50;
   Pooled;
@@ -524,7 +553,8 @@ Subset;
   Include;
   LT 'test_id' "69420";
   Name "69420".
-Capa 'test_value' 1;
+Name 'test_value' "69420".
+Capa '69420' 1;
   Lspec 0;
   Uspec 99999999;
   Pooled;
@@ -542,7 +572,8 @@ Subset;
   Include;
   LT 'test_id' "M200-6";
   Name "M200-6".
-Capa 'test_value' 1;
+Name 'test_value' "M200-6".
+Capa 'M200-6' 1;
   Lspec -0.3;
   Uspec 1.5;
   Pooled;
@@ -560,7 +591,8 @@ Subset;
   Include;
   LT 'test_id' "M200-9";
   Name "M200-9".
-Capa 'test_value' 1;
+Name 'test_value' "M200-9".
+Capa 'M200-9' 1;
   Lspec 157;
   Uspec 220;
   Pooled;
@@ -578,7 +610,8 @@ Subset;
   Include;
   LT 'test_id' "M200-10";
   Name "M200-10".
-Capa 'test_value' 1;
+Name 'test_value' "M200-10".
+Capa 'M200-10' 1;
   Lspec -1;
   Uspec 1;
   Pooled;
@@ -596,7 +629,8 @@ Subset;
   Include;
   LT 'test_id' "M400-10";
   Name "M400-10".
-Capa 'test_value' 1;
+Name 'test_value' "M400-10".
+Capa 'M400-10' 1;
   Lspec -1;
   Uspec 1;
   Pooled;
@@ -614,7 +648,8 @@ Subset;
   Include;
   LT 'test_id' "M500-10";
   Name "M500-10".
-Capa 'test_value' 1;
+Name 'test_value' "M500-10".
+Capa 'M500-10' 1;
   Lspec -1;
   Uspec 1;
   Pooled;
@@ -632,7 +667,8 @@ Subset;
   Include;
   LT 'test_id' "M100-3";
   Name "M100-3".
-Capa 'test_value' 1;
+Name 'test_value' "M100-3".
+Capa 'M100-3' 1;
   Lspec -1;
   Uspec 1;
   Pooled;
@@ -650,7 +686,8 @@ Subset;
   Include;
   LT 'test_id' "M300-10";
   Name "M300-10".
-Capa 'test_value' 1;
+Name 'test_value' "M300-10".
+Capa 'M300-10' 1;
   Lspec -1;
   Uspec 1;
   Pooled;
@@ -668,7 +705,8 @@ Subset;
   Include;
   LT 'test_id' "OM600-5";
   Name "OM600-5".
-Capa 'test_value' 1;
+Name 'test_value' "OM600-5".
+Capa 'OM600-5' 1;
   Lspec 0;
   Uspec 30;
   Pooled;
@@ -686,7 +724,8 @@ Subset;
   Include;
   LT 'test_id' "OSKP600-03";
   Name "OSKP600-03".
-Capa 'test_value' 1;
+Name 'test_value' "OSKP600-03".
+Capa 'OSKP600-03' 1;
   Lspec 5;
   Uspec 6;
   Pooled;
@@ -704,7 +743,8 @@ Subset;
   Include;
   LT 'test_id' "SKP300-01";
   Name "SKP300-01".
-Capa 'test_value' 1;
+Name 'test_value' "SKP300-01".
+Capa 'SKP300-01' 1;
   Lspec 6.5;
   Uspec 7.5;
   Pooled;
@@ -722,7 +762,8 @@ Subset;
   Include;
   LT 'test_id' "OSKP600-04";
   Name "OSKP600-04".
-Capa 'test_value' 1;
+Name 'test_value' "OSKP600-04".
+Capa 'OSKP600-04' 1;
   Lspec 8;
   Uspec 100;
   Pooled;
@@ -740,7 +781,8 @@ Subset;
   Include;
   LT 'test_id' "M200-8";
   Name "M200-8".
-Capa 'test_value' 1;
+Name 'test_value' "M200-8".
+Capa 'M200-8' 1;
   Lspec 6;
   Uspec 8.5;
   Pooled;
@@ -758,7 +800,8 @@ Subset;
   Include;
   LT 'test_id' "SKP600-71";
   Name "SKP600-71".
-Capa 'test_value' 1;
+Name 'test_value' "SKP600-71".
+Capa 'SKP600-71' 1;
   Lspec 8;
   Uspec 50;
   Pooled;
@@ -776,7 +819,8 @@ Subset;
   Include;
   LT 'test_id' "OSKP600-041";
   Name "OSKP600-041".
-Capa 'test_value' 1;
+Name 'test_value' "OSKP600-041".
+Capa 'OSKP600-041' 1;
   Lspec 8;
   Uspec 250;
   Pooled;
@@ -794,7 +838,8 @@ Subset;
   Include;
   LT 'test_id' "SKP600-77";
   Name "SKP600-77".
-Capa 'test_value' 1;
+Name 'test_value' "SKP600-77".
+Capa 'SKP600-77' 1;
   Lspec 0;
   Uspec 50;
   Pooled;
@@ -812,7 +857,8 @@ Subset;
   Include;
   LT 'test_id' "M500-1";
   Name "M500-1".
-Capa 'test_value' 1;
+Name 'test_value' "M500-1".
+Capa 'M500-1' 1;
   Lspec -1.5;
   Uspec 0.3;
   Pooled;
@@ -830,7 +876,8 @@ Subset;
   Include;
   LT 'test_id' "M300-2";
   Name "M300-2".
-Capa 'test_value' 1;
+Name 'test_value' "M300-2".
+Capa 'M300-2' 1;
   Lspec -1.25;
   Uspec -0.75;
   Pooled;
@@ -848,7 +895,8 @@ Subset;
   Include;
   LT 'test_id' "M500-2";
   Name "M500-2".
-Capa 'test_value' 1;
+Name 'test_value' "M500-2".
+Capa 'M500-2' 1;
   Lspec -1.25;
   Uspec -0.75;
   Pooled;
@@ -866,7 +914,8 @@ Subset;
   Include;
   LT 'test_id' "OSKP600-12";
   Name "OSKP600-12".
-Capa 'test_value' 1;
+Name 'test_value' "OSKP600-12".
+Capa 'OSKP600-12' 1;
   Lspec 0;
   Uspec 20;
   Pooled;
@@ -884,7 +933,8 @@ Subset;
   Include;
   LT 'test_id' "M200-4";
   Name "M200-4".
-Capa 'test_value' 1;
+Name 'test_value' "M200-4".
+Capa 'M200-4' 1;
   Lspec 6;
   Uspec 8.5;
   Pooled;
@@ -902,7 +952,8 @@ Subset;
   Include;
   LT 'test_id' "OSKP600-72";
   Name "OSKP600-72".
-Capa 'test_value' 1;
+Name 'test_value' "OSKP600-72".
+Capa 'OSKP600-72' 1;
   Lspec 0;
   Uspec 50;
   Pooled;
@@ -920,7 +971,8 @@ Subset;
   Include;
   LT 'test_id' "SKP600-74";
   Name "SKP600-74".
-Capa 'test_value' 1;
+Name 'test_value' "SKP600-74".
+Capa 'SKP600-74' 1;
   Lspec 0;
   Uspec 50;
   Pooled;
@@ -938,7 +990,8 @@ Subset;
   Include;
   LT 'test_id' "M400-4";
   Name "M400-4".
-Capa 'test_value' 1;
+Name 'test_value' "M400-4".
+Capa 'M400-4' 1;
   Lspec 6;
   Uspec 8.5;
   Pooled;
@@ -956,7 +1009,8 @@ Subset;
   Include;
   LT 'test_id' "M700-1";
   Name "M700-1".
-Capa 'test_value' 1;
+Name 'test_value' "M700-1".
+Capa 'M700-1' 1;
   Lspec 0;
   Uspec 0.1;
   Pooled;
@@ -974,7 +1028,8 @@ Subset;
   Include;
   LT 'test_id' "OSKP600-71";
   Name "OSKP600-71".
-Capa 'test_value' 1;
+Name 'test_value' "OSKP600-71".
+Capa 'OSKP600-71' 1;
   Lspec 0;
   Uspec 50;
   Pooled;
@@ -992,7 +1047,8 @@ Subset;
   Include;
   LT 'test_id' "OSKP600-74";
   Name "OSKP600-74".
-Capa 'test_value' 1;
+Name 'test_value' "OSKP600-74".
+Capa 'OSKP600-74' 1;
   Lspec 0;
   Uspec 50;
   Pooled;
@@ -1010,7 +1066,8 @@ Subset;
   Include;
   LT 'test_id' "M001-3";
   Name "M001-3".
-Capa 'test_value' 1;
+Name 'test_value' "M001-3".
+Capa 'M001-3' 1;
   Lspec 12.5;
   Uspec 13.5;
   Pooled;
@@ -1028,7 +1085,8 @@ Subset;
   Include;
   LT 'test_id' "OSKP600-75";
   Name "OSKP600-75".
-Capa 'test_value' 1;
+Name 'test_value' "OSKP600-75".
+Capa 'OSKP600-75' 1;
   Lspec 0;
   Uspec 50;
   Pooled;
@@ -1046,7 +1104,8 @@ Subset;
   Include;
   LT 'test_id' "M700-7";
   Name "M700-7".
-Capa 'test_value' 1;
+Name 'test_value' "M700-7".
+Capa 'M700-7' 1;
   Lspec -15;
   Uspec -7.5;
   Pooled;
@@ -1064,7 +1123,8 @@ Subset;
   Include;
   LT 'test_id' "M300-5";
   Name "M300-5".
-Capa 'test_value' 1;
+Name 'test_value' "M300-5".
+Capa 'M300-5' 1;
   Lspec -8.5;
   Uspec -7.5;
   Pooled;
@@ -1082,7 +1142,8 @@ Subset;
   Include;
   LT 'test_id' "OSKP600-73";
   Name "OSKP600-73".
-Capa 'test_value' 1;
+Name 'test_value' "OSKP600-73".
+Capa 'OSKP600-73' 1;
   Lspec 0;
   Uspec 50;
   Pooled;
@@ -1100,7 +1161,8 @@ Subset;
   Include;
   LT 'test_id' "M400-1";
   Name "M400-1".
-Capa 'test_value' 1;
+Name 'test_value' "M400-1".
+Capa 'M400-1' 1;
   Lspec -0.3;
   Uspec 1.5;
   Pooled;
@@ -1118,7 +1180,8 @@ Subset;
   Include;
   LT 'test_id' "SKP200-04";
   Name "SKP200-04".
-Capa 'test_value' 1;
+Name 'test_value' "SKP200-04".
+Capa 'SKP200-04' 1;
   Lspec 43;
   Uspec 85;
   Pooled;
@@ -1136,7 +1199,8 @@ Subset;
   Include;
   LT 'test_id' "M500-8";
   Name "M500-8".
-Capa 'test_value' 1;
+Name 'test_value' "M500-8".
+Capa 'M500-8' 1;
   Lspec -8.5;
   Uspec -6;
   Pooled;
@@ -1154,7 +1218,8 @@ Subset;
   Include;
   LT 'test_id' "SKP600-04";
   Name "SKP600-04".
-Capa 'test_value' 1;
+Name 'test_value' "SKP600-04".
+Capa 'SKP600-04' 1;
   Lspec 8;
   Uspec 250;
   Pooled;
@@ -1172,7 +1237,8 @@ Subset;
   Include;
   LT 'test_id' "M300-9";
   Name "M300-9".
-Capa 'test_value' 1;
+Name 'test_value' "M300-9".
+Capa 'M300-9' 1;
   Lspec 157;
   Uspec 220;
   Pooled;
@@ -1190,7 +1256,8 @@ Subset;
   Include;
   LT 'test_id' "M300-4";
   Name "M300-4".
-Capa 'test_value' 1;
+Name 'test_value' "M300-4".
+Capa 'M300-4' 1;
   Lspec -8.5;
   Uspec -6;
   Pooled;
@@ -1208,7 +1275,8 @@ Subset;
   Include;
   LT 'test_id' "M500-4";
   Name "M500-4".
-Capa 'test_value' 1;
+Name 'test_value' "M500-4".
+Capa 'M500-4' 1;
   Lspec -8.5;
   Uspec -6;
   Pooled;
@@ -1226,7 +1294,8 @@ Subset;
   Include;
   LT 'test_id' "SKP600-03";
   Name "SKP600-03".
-Capa 'test_value' 1;
+Name 'test_value' "SKP600-03".
+Capa 'SKP600-03' 1;
   Lspec 5;
   Uspec 6;
   Pooled;
@@ -1244,7 +1313,8 @@ Subset;
   Include;
   LT 'test_id' "M200-1";
   Name "M200-1".
-Capa 'test_value' 1;
+Name 'test_value' "M200-1".
+Capa 'M200-1' 1;
   Lspec -0.3;
   Uspec 1.5;
   Pooled;
@@ -1262,7 +1332,8 @@ Subset;
   Include;
   LT 'test_id' "SKP600-14";
   Name "SKP600-14".
-Capa 'test_value' 1;
+Name 'test_value' "SKP600-14".
+Capa 'SKP600-14' 1;
   Lspec 0;
   Uspec 20;
   Pooled;
@@ -1280,7 +1351,8 @@ Subset;
   Include;
   LT 'test_id' "OSKP600-14";
   Name "OSKP600-14".
-Capa 'test_value' 1;
+Name 'test_value' "OSKP600-14".
+Capa 'OSKP600-14' 1;
   Lspec 0;
   Uspec 20;
   Pooled;
@@ -1298,7 +1370,8 @@ Subset;
   Include;
   LT 'test_id' "SKP600-76";
   Name "SKP600-76".
-Capa 'test_value' 1;
+Name 'test_value' "SKP600-76".
+Capa 'SKP600-76' 1;
   Lspec 0;
   Uspec 50;
   Pooled;
@@ -1316,7 +1389,8 @@ Subset;
   Include;
   LT 'test_id' "M700-10";
   Name "M700-10".
-Capa 'test_value' 1;
+Name 'test_value' "M700-10".
+Capa 'M700-10' 1;
   Lspec 7.5;
   Uspec 15;
   Pooled;
@@ -1334,7 +1408,8 @@ Subset;
   Include;
   LT 'test_id' "M700-11";
   Name "M700-11".
-Capa 'test_value' 1;
+Name 'test_value' "M700-11".
+Capa 'M700-11' 1;
   Lspec 7.5;
   Uspec 15;
   Pooled;
@@ -1352,7 +1427,8 @@ Subset;
   Include;
   LT 'test_id' "OSKP600-79";
   Name "OSKP600-79".
-Capa 'test_value' 1;
+Name 'test_value' "OSKP600-79".
+Capa 'OSKP600-79' 1;
   Lspec 0;
   Uspec 50;
   Pooled;
@@ -1370,7 +1446,8 @@ Subset;
   Include;
   LT 'test_id' "SKP600-70";
   Name "SKP600-70".
-Capa 'test_value' 1;
+Name 'test_value' "SKP600-70".
+Capa 'SKP600-70' 1;
   Lspec 8;
   Uspec 12;
   Pooled;
@@ -1388,7 +1465,8 @@ Subset;
   Include;
   LT 'test_id' "OSKP600-13";
   Name "OSKP600-13".
-Capa 'test_value' 1;
+Name 'test_value' "OSKP600-13".
+Capa 'OSKP600-13' 1;
   Lspec 0;
   Uspec 20;
   Pooled;
@@ -1406,7 +1484,8 @@ Subset;
   Include;
   LT 'test_id' "M300-1";
   Name "M300-1".
-Capa 'test_value' 1;
+Name 'test_value' "M300-1".
+Capa 'M300-1' 1;
   Lspec -1.5;
   Uspec 0.3;
   Pooled;
@@ -1424,7 +1503,8 @@ Subset;
   Include;
   LT 'test_id' "SKP200-01";
   Name "SKP200-01".
-Capa 'test_value' 1;
+Name 'test_value' "SKP200-01".
+Capa 'SKP200-01' 1;
   Lspec 6.5;
   Uspec 7.5;
   Pooled;
@@ -1442,7 +1522,8 @@ Subset;
   Include;
   LT 'test_id' "M300-6";
   Name "M300-6".
-Capa 'test_value' 1;
+Name 'test_value' "M300-6".
+Capa 'M300-6' 1;
   Lspec -1.5;
   Uspec 0.3;
   Pooled;
@@ -1460,7 +1541,8 @@ Subset;
   Include;
   LT 'test_id' "M001-2";
   Name "M001-2".
-Capa 'test_value' 1;
+Name 'test_value' "M001-2".
+Capa 'M001-2' 1;
   Lspec 0.1;
   Uspec 0.4;
   Pooled;
