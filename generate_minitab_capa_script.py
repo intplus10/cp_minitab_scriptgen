@@ -38,10 +38,15 @@ except ImportError:
     tk = None
     filedialog = None
 
-# A Minitab worksheet neve, amire minden Subset parancs előtt vissza kell váltani,
-# különben a következő Subset már csak az előző (leszűkített) táblát látná,
-# nem a teljes eredeti adatsort.
-SOURCE_WORKSHEET = "Worksheet 1"
+# Amikor a Minitab a WOPEN paranccsal megnyit egy adatfájlt, a keletkező
+# worksheet nevét a fájlnévből veszi, kiterjesztés nélkül (pl. minitab_data.txt
+# -> "minitab_data"). Ezt a nevet kell használnunk minden Subset előtti
+# worksheet-váltásban, hogy mindig a teljes, frissen betöltött adatra váltsunk
+# vissza. A pontos nevet futásidőben számoljuk a data fájl nevéből (lásd main()).
+
+# A DECSEP (tizedes elválasztó) alparancs Minitab-kulcsszava a WOPEN-ben:
+# a felhasználó által választott karakterhez rendeljük.
+DECSEP_KEYWORD = {",": "COMMA", ".": "PERIOD"}
 
 # A script saját könyvtára. A __file__ maga a jelenlegi .py fájl elérési útja;
 # abspath -> teljes (abszolút) útvonal, dirname -> ebből a mappa. Így az alapértelmezett
@@ -199,11 +204,41 @@ def write_minitab_data(path, analyzed_ids, values, decimal_separator):
                 f.write(f"{test_id}\t{value}\n")
 
 
-def build_commands(test_id, lsl, usl):
+def build_open_command(data_path, decimal_separator):
+    """Összeállítja a WOPEN parancsot, ami a tiszta adatfájlt betölti Minitabba.
+
+    Ez a parancs kerül a kész exec fájl ELEJÉRE, így magától betölti az adatot
+    (nincs kézi File > Open). A parancs szerkezete pontosan az, amit a Minitab
+    generált a data fájl megnyitásakor (TAB-tagolt, dupla idézőjeles szövegek,
+    a tizedes elválasztó a kiválasztott karakter, a fejléc az 1. sorban van, az
+    adat a 2. sortól indul). A data_path abszolút útját idézőjelbe tesszük, így
+    az esetleges szóközök sem okoznak gondot.
+    """
+    return (
+        f'WOPEN "{data_path}";\n'
+        "  FIELD;\n"
+        "  TAB;\n"
+        "  TDELIMITER;\n"
+        "  DOUBLEQUOTE;\n"
+        "  DECSEP;\n"
+        f"  {DECSEP_KEYWORD[decimal_separator]};\n"
+        "  DATA;\n"
+        "  IGNOREBLANKROWS;\n"
+        "  EQUALCOLUMNS;\n"
+        "  SHEET 1;\n"
+        "  VNAMES 1;\n"
+        "  FIRST 2.\n"
+    )
+
+
+def build_commands(test_id, lsl, usl, worksheet_name):
     """Összeállítja egy adott test_id-hez tartozó teljes Minitab parancsblokkot.
 
     A blokk lépései:
-      1. Worksheet "Worksheet 1".   -> visszaváltunk az eredeti, teljes adatsorra
+      1. Worksheet "<name>".        -> visszaváltunk a WOPEN-nel betöltött, teljes
+                                        adatsorra (a name a data fájl neve, kiterjesztés
+                                        nélkül; nélküle a következő Subset már csak az
+                                        előző, leszűkített táblát látná)
       2. Subset; Include; GE/LE...  -> kiszűrjük azokat a sorokat, ahol
                                         test_id pontosan egyenlő a jelenlegi lépéssel
                                         (GE + LE együtt = "egyenlő", mert az "EQ"
@@ -216,7 +251,7 @@ def build_commands(test_id, lsl, usl):
                                         megadott LSL/USL limitekkel
     """
     return (
-        f'Worksheet "{SOURCE_WORKSHEET}".\n'
+        f'Worksheet "{worksheet_name}".\n'
         "Subset;\n"
         "  Include;\n"
         f'  GE \'test_id\' "{test_id}";\n'
@@ -257,11 +292,20 @@ def main():
         "--decimal-separator", choices=[",", "."],
         help="Decimal separator for Lspec/Uspec (omit to pick it interactively)",
     )
+    parser.add_argument(
+        "--no-open", action="store_true",
+        help="Skip the WOPEN header (commands only, if the data is already loaded)",
+    )
     args = parser.parse_args()
 
     # Ha a felhasználó nem adta meg parancssorból, kérdezzük meg felugró ablakban.
     csv_path = args.csv_path or prompt_csv_path()
     decimal_separator = args.decimal_separator or prompt_decimal_separator()
+
+    # A data fájl abszolút útja (ezt bakeljük a WOPEN-be), és a belőle képzett
+    # worksheet név (fájlnév kiterjesztés nélkül), amire a Subset-ek hivatkoznak.
+    data_path = os.path.abspath(args.data_output)
+    worksheet_name = os.path.splitext(os.path.basename(data_path))[0]
 
     order, values, limits = load_test_steps(csv_path)
 
@@ -290,15 +334,18 @@ def main():
         lower_raw, upper_raw = limits[test_id]
         lsl = format_limit(lower_raw, decimal_separator)
         usl = format_limit(upper_raw, decimal_separator)
-        blocks.append(build_commands(test_id, lsl, usl))
+        blocks.append(build_commands(test_id, lsl, usl, worksheet_name))
 
     # 1) A tiszta, Minitab-barát adatfájl (csak test_id + test_value, TAB-tagolva).
-    #    Ezt importálod Minitabba a nyers CSV helyett, így nincs sortörés-gond.
+    #    Ezt tölti be a WOPEN a nyers CSV helyett, így nincs sortörés-gond.
     write_minitab_data(args.data_output, analyzed_ids, values, decimal_separator)
 
-    # 2) A parancsfájl: minden blokkot üres sorral elválasztva egyetlen txt-be,
-    #    amit a Minitab Command Line / Session ablakába másolsz (vagy exec-ként futtatsz).
+    # 2) A parancsfájl. Ha nem kértük a --no-open kapcsolót, az elejére kerül a
+    #    WOPEN, ami betölti a data fájlt -> így az egész fájl egy önálló exec:
+    #    Minitabban File > Run an Exec, és magától betölt + lefuttat mindent.
     with open(args.output, "w", encoding="utf-8") as f:
+        if not args.no_open:
+            f.write(build_open_command(data_path, decimal_separator) + "\n")
         f.write("\n".join(blocks))
 
     total = len(order)
