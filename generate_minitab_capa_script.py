@@ -316,8 +316,8 @@ def build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separ
         f"SET {column}\n"
         f"{data_block}\n"
         "END\n"
-        f'NAME {column} "{test_id}".\n'
-        f"Capa '{test_id}' 1;\n"
+        f'NAME {column} "P_{test_id}".\n'
+        f"Capa 'P_{test_id}' 1;\n"
         f"  Lspec {lsl};\n"
         f"  Uspec {usl};\n"
         "  Pooled;\n"
