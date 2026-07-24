@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
-"""Generate a Minitab session-command script for per-test_id capability analysis.
+"""Generate a self-contained Minitab exec for per-test_id capability analysis.
 
 Reads a tall-table test-data export (one row per measurement, columns include
 test_id, test_value, lower_limit, upper_limit), drops test_id steps whose
 test_value has zero standard deviation (pass/fail style flags with no real
-variation), and emits one Subset + Capability Analysis block per remaining
-test_id into a single .txt file that can be pasted into / run from Minitab's
-Session window (Edit > Command Line Editor).
+variation), and emits ONE self-contained Minitab exec (.mtb) file.
+
+The exec has no external data dependency: each remaining test_id's measured
+values are written INLINE via a SET ... END block into its own column, the
+column is renamed to the test_id, and a Capability Analysis (Capa) is run on
+it. Because the data is inlined, there is no separate CSV/data file to import
+and no Subset step — you just run the exec (File > Run an Exec) and everything
+(data + analyses) executes.
 """
 
 # argparse: parancssori kapcsolók (pl. --decimal-separator) feldolgozásához.
@@ -38,26 +43,17 @@ except ImportError:
     tk = None
     filedialog = None
 
-# Amikor a Minitab a WOPEN paranccsal megnyit egy adatfájlt, a keletkező
-# worksheet nevét a fájlnévből veszi, kiterjesztés nélkül (pl. minitab_data.txt
-# -> "minitab_data"). Ezt a nevet kell használnunk minden Subset előtti
-# worksheet-váltásban, hogy mindig a teljes, frissen betöltött adatra váltsunk
-# vissza. A pontos nevet futásidőben számoljuk a data fájl nevéből (lásd main()).
-
-# A DECSEP (tizedes elválasztó) alparancs Minitab-kulcsszava a WOPEN-ben:
-# a felhasználó által választott karakterhez rendeljük.
-DECSEP_KEYWORD = {",": "COMMA", ".": "PERIOD"}
+# Hány mérési értéket írjunk egy sorba a SET blokk adatrészében. Csak
+# olvashatóság kérdése — a Minitab a SET után az END-ig minden számot beolvas,
+# akárhány sorban is vannak.
+VALUES_PER_LINE = 10
 
 # A script saját könyvtára. A __file__ maga a jelenlegi .py fájl elérési útja;
 # abspath -> teljes (abszolút) útvonal, dirname -> ebből a mappa. Így az alapértelmezett
 # kimeneti fájl mindig a script MELLÉ kerül, függetlenül attól, honnan (melyik
 # munkakönyvtárból) indítjuk el a scriptet.
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_OUTPUT = os.path.join(SCRIPT_DIR, "minitab_capability_commands.txt")
-# A tiszta, Minitab-barát adatfájl alapértelmezett helye (szintén a script mellé).
-# Ebben csak a test_id és test_value oszlop van, TAB-bal tagolva, sortörés-mentesen,
-# hogy a Minitab importja ne akadjon meg a nyers CSV többsoros mezőin.
-DEFAULT_DATA = os.path.join(SCRIPT_DIR, "minitab_data.txt")
+DEFAULT_OUTPUT = os.path.join(SCRIPT_DIR, "minitab_capability_analysis.mtb")
 
 
 def prompt_csv_path():
@@ -91,8 +87,9 @@ def prompt_decimal_separator():
 
     Erre azért van szükség, mert Minitabban a tizedes elválasztó a Windows
     regionális beállításától függ (pl. magyar rendszeren vessző: 6,5), és ha
-    a script a rossz karaktert írja a Lspec/Uspec értékekbe, a Minitab
-    "Invalid name or invalid syntax" hibát dob.
+    a script a rossz karaktert írja a számokba (SET adat, Lspec/Uspec), a
+    Minitab "Invalid name or invalid syntax" hibát dob, vagy szövegként olvassa
+    be a számokat.
     """
     # Egy kis dict-ben tároljuk a kiválasztott értéket, mert a gombok
     # "command" callback-jei (lambda-k) csak úgy tudnak "kifelé" írni egy
@@ -112,7 +109,7 @@ def prompt_decimal_separator():
     root = tk.Tk()
     root.title("Tizedes elválasztó")
     tk.Label(
-        root, text="Milyen tizedes elválasztót használjon a Minitab a Lspec/Uspec értékeknél?",
+        root, text="Milyen tizedes elválasztót használjon a Minitab a számoknál?",
         padx=20, pady=10,
     ).pack()
     frame = tk.Frame(root, padx=20, pady=10)
@@ -134,7 +131,7 @@ def load_test_steps(csv_path):
                (ezzel a kimeneti fájlban is megmarad az eredeti sorrend)
       values - dict: test_id -> az adott lépéshez tartozó test_value-k listája,
                NYERS string formában (ebből számoljuk a szórást float()-tal,
-               és ezt írjuk a tiszta adatfájlba is)
+               és ezt írjuk a SET blokkokba is)
       limits - dict: test_id -> (lower_limit, upper_limit) pár (LSL/USL)
     """
     values = defaultdict(list)
@@ -157,22 +154,24 @@ def load_test_steps(csv_path):
                 order.append(test_id)
                 limits[test_id] = (row["lower_limit"], row["upper_limit"])
             # A NYERS (string) test_value-t tároljuk, nem a float() eredményét.
-            # Így a tiszta adatfájlba pontosan az eredeti szám kerül vissza,
-            # nem torzul el a float -> str oda-vissza konverzión (pl. hosszú
-            # tizedestörteknél). A szóráshoz úgyis külön float()-oljuk majd.
+            # Így a SET blokkba pontosan az eredeti szám kerül vissza, nem torzul
+            # el a float -> str oda-vissza konverzión (pl. hosszú tizedestörteknél).
+            # A szóráshoz úgyis külön float()-oljuk majd.
             values[test_id].append(row["test_value"])
 
     return order, values, limits
 
 
-def format_limit(raw, decimal_separator):
-    """Egy CSV-ből kiolvasott limit-szöveget ("6.5", "50.0", ...) Minitab-kompatibilis
-    számmá alakít.
+def format_number(raw, decimal_separator):
+    """Egy CSV-ből kiolvasott szám-szöveget ("6.5", "50.0", "15.529"...) Minitab-
+    kompatibilis alakra hoz.
 
     - Ha a szám egész (pl. 50.0), simán "50"-et adunk vissza, tizedesjel nélkül.
-    - Ha nem egész (pl. 6.5), a Python alapértelmezett "." tizedespontját
-      lecseréljük a kért elválasztóra (pl. "," -> "6,5"), mert a magyar
-      Minitab/Windows beállítás a vesszőt várja.
+    - Ha nem egész, a "." tizedespontot lecseréljük a kért elválasztóra
+      (pl. "," -> "6,5"), mert a magyar Minitab/Windows a vesszőt várja.
+
+    Ugyanez a formázás kell a limitekhez (Lspec/Uspec) ÉS a SET-be írt mérési
+    értékekhez is, ezért egy közös függvény.
     """
     value = float(raw)
     if value == int(value):
@@ -180,84 +179,38 @@ def format_limit(raw, decimal_separator):
     return repr(value).replace(".", decimal_separator)
 
 
-def write_minitab_data(path, analyzed_ids, values, decimal_separator):
-    """Kiír egy tiszta, TAB-tagolt adatfájlt Minitab-importáláshoz.
-
-    Csak két oszlop kerül bele: test_id és test_value — ez a kettő az egyetlen,
-    amit a subset/capa parancsok használnak. A nyers CSV problémás mezőit
-    (description, testrun_info: ezekben van sortörés) meg sem érintjük, így a
-    Minitab importja nem darabolódik szét.
-
-    - analyzed_ids: azoknak a test_id-knek a listája, amikre tényleg futtatunk
-      elemzést (a 0 szórásúakat kihagyjuk, felesleges lenne az adatuk).
-    - A test_value tizedespontját is a kért elválasztóra cseréljük, hogy a
-      Minitab a számokat helyesen (számként, ne szövegként) olvassa be.
-    """
-    with open(path, "w", encoding="utf-8", newline="") as f:
-        # Fejléc: a Minitab az oszlopokat a fejlécsor alapján nevezi el, ezért
-        # itt PONTOSAN a 'test_id' és 'test_value' nevek kellenek, amikre a
-        # parancsok később hivatkoznak.
-        f.write("test_id\ttest_value\n")
-        for test_id in analyzed_ids:
-            for raw_value in values[test_id]:
-                value = raw_value.replace(".", decimal_separator)
-                f.write(f"{test_id}\t{value}\n")
-
-
-def build_open_command(data_path, decimal_separator):
-    """Összeállítja a WOPEN parancsot, ami a tiszta adatfájlt betölti Minitabba.
-
-    Ez a parancs kerül a kész exec fájl ELEJÉRE, így magától betölti az adatot
-    (nincs kézi File > Open). A parancs szerkezete pontosan az, amit a Minitab
-    generált a data fájl megnyitásakor (TAB-tagolt, dupla idézőjeles szövegek,
-    a tizedes elválasztó a kiválasztott karakter, a fejléc az 1. sorban van, az
-    adat a 2. sortól indul). A data_path abszolút útját idézőjelbe tesszük, így
-    az esetleges szóközök sem okoznak gondot.
-    """
-    return (
-        f'WOPEN "{data_path}";\n'
-        "  FIELD;\n"
-        "  TAB;\n"
-        "  TDELIMITER;\n"
-        "  DOUBLEQUOTE;\n"
-        "  DECSEP;\n"
-        f"  {DECSEP_KEYWORD[decimal_separator]};\n"
-        "  DATA;\n"
-        "  IGNOREBLANKROWS;\n"
-        "  EQUALCOLUMNS;\n"
-        "  SHEET 1;\n"
-        "  VNAMES 1;\n"
-        "  FIRST 2.\n"
-    )
-
-
-def build_commands(test_id, lsl, usl, worksheet_name):
-    """Összeállítja egy adott test_id-hez tartozó teljes Minitab parancsblokkot.
+def build_capa_block(test_id, raw_values, lsl, usl, column, decimal_separator):
+    """Összeállítja egy adott test_id-hez tartozó teljes, önálló Minitab blokkot.
 
     A blokk lépései:
-      1. Worksheet "<name>".        -> visszaváltunk a WOPEN-nel betöltött, teljes
-                                        adatsorra (a name a data fájl neve, kiterjesztés
-                                        nélkül; nélküle a következő Subset már csak az
-                                        előző, leszűkített táblát látná)
-      2. Subset; Include; GE/LE...  -> kiszűrjük azokat a sorokat, ahol
-                                        test_id pontosan egyenlő a jelenlegi lépéssel
-                                        (GE + LE együtt = "egyenlő", mert az "EQ"
-                                        subcommand ezen a Minitab verzión hibát dobott)
-      3. Name 'test_value' "..."    -> a mérési oszlopot átnevezzük az aktuális
-                                        test_id-re, így a Capability Analysis
-                                        címe nem "test_value", hanem a valódi
-                                        tesztlépés neve lesz
-      4. Capa '...' 1; ...          -> lefuttatjuk a capability analysist a
-                                        megadott LSL/USL limitekkel
+      1. SET C<n> / <adatok> / END  -> az adott test_id mérési értékeit közvetlenül
+                                        beírjuk egy üres oszlopba (nincs külön data
+                                        fájl, nincs import). A számokat szóközzel
+                                        választjuk el, a tizedesjel a kiválasztott
+                                        elválasztó.
+      2. NAME C<n> "<test_id>"      -> az oszlopot elnevezzük a test_id-re, így a
+                                        Capability Analysis címe a valódi tesztlépés
+                                        neve lesz (nem "C1" vagy "test_value").
+      3. Capa '<test_id>' 1; ...    -> lefuttatjuk a capability analysist a
+                                        megadott LSL/USL limitekkel.
+
+    Minden test_id a SAJÁT oszlopába kerül (C1, C2, ...), így nem kell Subset,
+    nem kell worksheet-váltogatás, és nincs esély a táblák "összekeveredésére".
     """
+    # A mérési értékeket a helyes tizedesjellel, szóközzel elválasztva soronként
+    # VALUES_PER_LINE darabonként tördeljük (csak olvashatóság miatt).
+    formatted = [format_number(v, decimal_separator) for v in raw_values]
+    data_lines = []
+    for i in range(0, len(formatted), VALUES_PER_LINE):
+        chunk = formatted[i:i + VALUES_PER_LINE]
+        data_lines.append("  " + " ".join(chunk))
+    data_block = "\n".join(data_lines)
+
     return (
-        f'Worksheet "{worksheet_name}".\n'
-        "Subset;\n"
-        "  Include;\n"
-        f'  GE \'test_id\' "{test_id}";\n'
-        f'  LE \'test_id\' "{test_id}";\n'
-        f'  Name "{test_id}".\n'
-        f'Name \'test_value\' "{test_id}".\n'
+        f"SET {column}\n"
+        f"{data_block}\n"
+        "END\n"
+        f'NAME {column} "{test_id}".\n'
         f"Capa '{test_id}' 1;\n"
         f"  Lspec {lsl};\n"
         f"  Uspec {usl};\n"
@@ -282,19 +235,11 @@ def main():
     )
     parser.add_argument(
         "-o", "--output", default=DEFAULT_OUTPUT,
-        help="Command .txt path (default: a script mellé, %(default)s)",
-    )
-    parser.add_argument(
-        "-d", "--data-output", default=DEFAULT_DATA,
-        help="Clean Minitab data .txt path (default: a script mellé, %(default)s)",
+        help="Output Minitab exec (.mtb) path (default: a script mellé, %(default)s)",
     )
     parser.add_argument(
         "--decimal-separator", choices=[",", "."],
-        help="Decimal separator for Lspec/Uspec (omit to pick it interactively)",
-    )
-    parser.add_argument(
-        "--no-open", action="store_true",
-        help="Skip the WOPEN header (commands only, if the data is already loaded)",
+        help="Decimal separator for the numbers (omit to pick it interactively)",
     )
     args = parser.parse_args()
 
@@ -302,18 +247,13 @@ def main():
     csv_path = args.csv_path or prompt_csv_path()
     decimal_separator = args.decimal_separator or prompt_decimal_separator()
 
-    # A data fájl abszolút útja (ezt bakeljük a WOPEN-be), és a belőle képzett
-    # worksheet név (fájlnév kiterjesztés nélkül), amire a Subset-ek hivatkoznak.
-    data_path = os.path.abspath(args.data_output)
-    worksheet_name = os.path.splitext(os.path.basename(data_path))[0]
-
     order, values, limits = load_test_steps(csv_path)
 
     # Statisztika a végső összefoglalóhoz: hány test_id-t hagytunk ki és miért.
     skipped_zero_std = []
     skipped_no_variance = []
-    analyzed_ids = []   # azok a test_id-k, amikre tényleg futtatunk elemzést
     blocks = []
+    column_index = 0   # melyik oszlopba (C1, C2, ...) írjuk a következő test_id-t
 
     for test_id in order:
         # A nyers string értékeket float()-oljuk, hogy szórást tudjunk számolni.
@@ -330,22 +270,18 @@ def main():
             skipped_zero_std.append(test_id)
             continue
 
-        analyzed_ids.append(test_id)
+        column_index += 1
+        column = f"C{column_index}"
         lower_raw, upper_raw = limits[test_id]
-        lsl = format_limit(lower_raw, decimal_separator)
-        usl = format_limit(upper_raw, decimal_separator)
-        blocks.append(build_commands(test_id, lsl, usl, worksheet_name))
+        lsl = format_number(lower_raw, decimal_separator)
+        usl = format_number(upper_raw, decimal_separator)
+        blocks.append(
+            build_capa_block(test_id, values[test_id], lsl, usl, column, decimal_separator)
+        )
 
-    # 1) A tiszta, Minitab-barát adatfájl (csak test_id + test_value, TAB-tagolva).
-    #    Ezt tölti be a WOPEN a nyers CSV helyett, így nincs sortörés-gond.
-    write_minitab_data(args.data_output, analyzed_ids, values, decimal_separator)
-
-    # 2) A parancsfájl. Ha nem kértük a --no-open kapcsolót, az elejére kerül a
-    #    WOPEN, ami betölti a data fájlt -> így az egész fájl egy önálló exec:
-    #    Minitabban File > Run an Exec, és magától betölt + lefuttat mindent.
+    # Az önálló exec: minden blokkot üres sorral elválasztva egyetlen fájlba.
+    # Minitabban File > Run an Exec -> betölti az inline adatot ÉS lefuttat mindent.
     with open(args.output, "w", encoding="utf-8") as f:
-        if not args.no_open:
-            f.write(build_open_command(data_path, decimal_separator) + "\n")
         f.write("\n".join(blocks))
 
     total = len(order)
@@ -353,8 +289,7 @@ def main():
     print(f"Skipped (zero std dev):          {len(skipped_zero_std)}")
     print(f"Skipped (fewer than 2 points):   {len(skipped_no_variance)}")
     print(f"Capability blocks written:       {len(blocks)}")
-    print(f"Data (clean) written to:         {args.data_output}")
-    print(f"Commands written to:             {args.output}")
+    print(f"Exec written to:                 {args.output}")
 
 
 if __name__ == "__main__":
