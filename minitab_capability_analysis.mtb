@@ -2463,3 +2463,5 @@ LET 'Cpk'(82) = 'cpk_tmp'(1)
 Copy 'step_id' 'Cp' 'Cpk';
   Newws "summary";
   Varnames.
+
+Print 'step_id' 'Cp' 'Cpk'.

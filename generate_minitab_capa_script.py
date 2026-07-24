@@ -235,6 +235,18 @@ def build_summary_copy():
     )
 
 
+def build_summary_print():
+    """Kiírja a summary táblát (step_id/Cp/Cpk) a Session ablakba.
+
+    A Minitab grafikonjai nem menthetők session commanddal, viszont a report
+    kézi összeállításakor (az összes output kijelölése -> Send to Report / Word)
+    a Session szöveges kimenete is bekerül. Ha tehát a summary táblát Print-tel
+    a Sessionbe írjuk, akkor a végső Word-reportban a chartok MELLETT ott lesz a
+    step_id/Cp/Cpk összefoglaló táblázat is — egyetlen exporttal.
+    """
+    return f"Print '{COL_STEP_ID}' '{COL_CP}' '{COL_CPK}'.\n"
+
+
 def build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separator):
     """Összeállítja egy adott test_id-hez tartozó teljes Minitab blokkot, storage-dzsel.
 
@@ -357,9 +369,12 @@ def main():
         blocks.append(
             build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separator)
         )
-    # A legvégén a summary oszlopokat átmásoljuk egy külön "summary" worksheetre.
+    # A legvégén a summary oszlopokat átmásoljuk egy külön "summary" worksheetre,
+    # majd Print-tel a Session ablakba is kiírjuk (hogy a kézi Word-exportba
+    # bekerüljön a chartok mellé).
     if n_analyzed:
         blocks.append(build_summary_copy())
+        blocks.append(build_summary_print())
 
     # Az önálló exec: minden blokkot üres sorral elválasztva egyetlen fájlba.
     # Minitabban File > Run an Exec -> betölti az inline adatot, lefuttat minden
