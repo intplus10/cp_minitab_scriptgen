@@ -49,6 +49,10 @@ SOURCE_WORKSHEET = "Worksheet 1"
 # munkakönyvtárból) indítjuk el a scriptet.
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_OUTPUT = os.path.join(SCRIPT_DIR, "minitab_capability_commands.txt")
+# A tiszta, Minitab-barát adatfájl alapértelmezett helye (szintén a script mellé).
+# Ebben csak a test_id és test_value oszlop van, TAB-bal tagolva, sortörés-mentesen,
+# hogy a Minitab importja ne akadjon meg a nyers CSV többsoros mezőin.
+DEFAULT_DATA = os.path.join(SCRIPT_DIR, "minitab_data.txt")
 
 
 def prompt_csv_path():
@@ -123,8 +127,9 @@ def load_test_steps(csv_path):
     Visszaadott értékek:
       order  - a test_id-k listája, első előfordulásuk sorrendjében
                (ezzel a kimeneti fájlban is megmarad az eredeti sorrend)
-      values - dict: test_id -> az adott lépéshez tartozó test_value-k listája
-               (ebből számoljuk majd a szórást)
+      values - dict: test_id -> az adott lépéshez tartozó test_value-k listája,
+               NYERS string formában (ebből számoljuk a szórást float()-tal,
+               és ezt írjuk a tiszta adatfájlba is)
       limits - dict: test_id -> (lower_limit, upper_limit) pár (LSL/USL)
     """
     values = defaultdict(list)
@@ -146,7 +151,11 @@ def load_test_steps(csv_path):
                 # és a limiteket (minden sorban ugyanaz a limit, nem kell újra tárolni).
                 order.append(test_id)
                 limits[test_id] = (row["lower_limit"], row["upper_limit"])
-            values[test_id].append(float(row["test_value"]))
+            # A NYERS (string) test_value-t tároljuk, nem a float() eredményét.
+            # Így a tiszta adatfájlba pontosan az eredeti szám kerül vissza,
+            # nem torzul el a float -> str oda-vissza konverzión (pl. hosszú
+            # tizedestörteknél). A szóráshoz úgyis külön float()-oljuk majd.
+            values[test_id].append(row["test_value"])
 
     return order, values, limits
 
@@ -164,6 +173,30 @@ def format_limit(raw, decimal_separator):
     if value == int(value):
         return str(int(value))
     return repr(value).replace(".", decimal_separator)
+
+
+def write_minitab_data(path, analyzed_ids, values, decimal_separator):
+    """Kiír egy tiszta, TAB-tagolt adatfájlt Minitab-importáláshoz.
+
+    Csak két oszlop kerül bele: test_id és test_value — ez a kettő az egyetlen,
+    amit a subset/capa parancsok használnak. A nyers CSV problémás mezőit
+    (description, testrun_info: ezekben van sortörés) meg sem érintjük, így a
+    Minitab importja nem darabolódik szét.
+
+    - analyzed_ids: azoknak a test_id-knek a listája, amikre tényleg futtatunk
+      elemzést (a 0 szórásúakat kihagyjuk, felesleges lenne az adatuk).
+    - A test_value tizedespontját is a kért elválasztóra cseréljük, hogy a
+      Minitab a számokat helyesen (számként, ne szövegként) olvassa be.
+    """
+    with open(path, "w", encoding="utf-8", newline="") as f:
+        # Fejléc: a Minitab az oszlopokat a fejlécsor alapján nevezi el, ezért
+        # itt PONTOSAN a 'test_id' és 'test_value' nevek kellenek, amikre a
+        # parancsok később hivatkoznak.
+        f.write("test_id\ttest_value\n")
+        for test_id in analyzed_ids:
+            for raw_value in values[test_id]:
+                value = raw_value.replace(".", decimal_separator)
+                f.write(f"{test_id}\t{value}\n")
 
 
 def build_commands(test_id, lsl, usl):
@@ -214,7 +247,11 @@ def main():
     )
     parser.add_argument(
         "-o", "--output", default=DEFAULT_OUTPUT,
-        help="Output .txt path (default: a script mellé, %(default)s)",
+        help="Command .txt path (default: a script mellé, %(default)s)",
+    )
+    parser.add_argument(
+        "-d", "--data-output", default=DEFAULT_DATA,
+        help="Clean Minitab data .txt path (default: a script mellé, %(default)s)",
     )
     parser.add_argument(
         "--decimal-separator", choices=[",", "."],
@@ -231,10 +268,12 @@ def main():
     # Statisztika a végső összefoglalóhoz: hány test_id-t hagytunk ki és miért.
     skipped_zero_std = []
     skipped_no_variance = []
+    analyzed_ids = []   # azok a test_id-k, amikre tényleg futtatunk elemzést
     blocks = []
 
     for test_id in order:
-        test_values = values[test_id]
+        # A nyers string értékeket float()-oljuk, hogy szórást tudjunk számolni.
+        test_values = [float(v) for v in values[test_id]]
         if len(test_values) < 2:
             # Szórást csak legalább 2 adatpontból lehet számolni.
             skipped_no_variance.append(test_id)
@@ -247,13 +286,18 @@ def main():
             skipped_zero_std.append(test_id)
             continue
 
+        analyzed_ids.append(test_id)
         lower_raw, upper_raw = limits[test_id]
         lsl = format_limit(lower_raw, decimal_separator)
         usl = format_limit(upper_raw, decimal_separator)
         blocks.append(build_commands(test_id, lsl, usl))
 
-    # Minden blokkot egy üres sorral elválasztva írunk egyetlen txt fájlba,
-    # amit aztán be lehet másolni a Minitab Command Line / Session ablakába.
+    # 1) A tiszta, Minitab-barát adatfájl (csak test_id + test_value, TAB-tagolva).
+    #    Ezt importálod Minitabba a nyers CSV helyett, így nincs sortörés-gond.
+    write_minitab_data(args.data_output, analyzed_ids, values, decimal_separator)
+
+    # 2) A parancsfájl: minden blokkot üres sorral elválasztva egyetlen txt-be,
+    #    amit a Minitab Command Line / Session ablakába másolsz (vagy exec-ként futtatsz).
     with open(args.output, "w", encoding="utf-8") as f:
         f.write("\n".join(blocks))
 
@@ -262,7 +306,8 @@ def main():
     print(f"Skipped (zero std dev):          {len(skipped_zero_std)}")
     print(f"Skipped (fewer than 2 points):   {len(skipped_no_variance)}")
     print(f"Capability blocks written:       {len(blocks)}")
-    print(f"Output written to:               {args.output}")
+    print(f"Data (clean) written to:         {args.data_output}")
+    print(f"Commands written to:             {args.output}")
 
 
 if __name__ == "__main__":
