@@ -1,4 +1,4 @@
-Name C83 "step_id" C84 "Cp" C85 "Cpk" C86 "Result" C87 "id_tmp" C88 "cp_tmp" C89 "cpk_tmp"
+Name C83 "step_id" C84 "Cp" C85 "Cpk" C86 "Result" C87 "id_tmp" C88 "cp_tmp" C89 "cpk_tmp" C90 "flag_tmp"
 
 SET C1
   15,529 14,666 15,377 15,427 13,645 15,928 13,606 13,247 13,067 13,048
@@ -2460,7 +2460,8 @@ LET 'step_id'(82) = 'id_tmp'(1)
 LET 'Cp'(82) = 'cp_tmp'(1)
 LET 'Cpk'(82) = 'cpk_tmp'(1)
 
-Let 'Result' = IF('Cp'*100<133 Or 'Cpk'*100<133; "FAIL"; "PASS")
+Let 'flag_tmp' = ('Cp'*100<133) + ('Cpk'*100<133)
+Code (0) "PASS" (1:2) "FAIL" 'flag_tmp' 'Result'
 
 Copy 'step_id' 'Cp' 'Cpk' 'Result';
   Newws "summary";

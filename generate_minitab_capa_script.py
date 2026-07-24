@@ -66,6 +66,7 @@ COL_RESULT = "Result"     # summary: PASS/FAIL a Cp/Cpk határérték alapján
 COL_ID_TMP = "id_tmp"     # temp: a Capa ide tárolja a változónevet (1. sor)
 COL_CP_TMP = "cp_tmp"     # temp: a Capa ide tárolja a Cp-t (1. sor)
 COL_CPK_TMP = "cpk_tmp"   # temp: a Capa ide tárolja a Cpk-t (1. sor)
+COL_FLAG_TMP = "flag_tmp" # temp: numerikus bukás-flag (0=PASS, 1-2=FAIL)
 
 # Kapabilitási határérték: FAIL, ha Cp VAGY Cpk ez alatt van.
 CAPABILITY_THRESHOLD = 1.33
@@ -224,28 +225,37 @@ def build_summary_header(n_analyzed):
         f' C{n_analyzed + 4} "{COL_RESULT}"'
         f' C{n_analyzed + 5} "{COL_ID_TMP}"'
         f' C{n_analyzed + 6} "{COL_CP_TMP}"'
-        f' C{n_analyzed + 7} "{COL_CPK_TMP}"\n'
+        f' C{n_analyzed + 7} "{COL_CPK_TMP}"'
+        f' C{n_analyzed + 8} "{COL_FLAG_TMP}"\n'
     )
 
 
 def build_summary_result():
     """Kiszámolja a PASS/FAIL verdict oszlopot a Cp/Cpk határérték alapján.
 
-    A loop UTÁN fut, amikor a Cp/Cpk oszlopok már fel vannak töltve. Egyetlen
-    oszlopszintű LET, ami egyszerre minden sorra kiszámolja az eredményt:
-      FAIL, ha Cp < 1,33 VAGY Cpk < 1,33; egyébként PASS.
+    A loop UTÁN fut, amikor a Cp/Cpk oszlopok már fel vannak töltve.
+    FAIL, ha Cp < 1,33 VAGY Cpk < 1,33; egyébként PASS.
 
-    Két Minitab-sajátosság miatt így néz ki a képlet:
-      - Cp*100 < 133  a  Cp < 1,33  helyett -> így nincs vesszős tizedes a
-        képletben (a "1,33" ütközne a számformázással).
-      - a függvény-argumentumokat PONTOSVESSZŐ választja el (nem vessző), mert
-        vesszős tizedes-beállításnál a Minitab a pontosvesszőt várja
-        (ezt a GUI Calculator capture is így generálta).
+    FONTOS — miért NEM IF(...)-fel csináljuk:
+      A Minitab függvény-argumentum elválasztója (a ; vagy , az IF-ben) NEM a
+      tizedesjeltől függ, hanem egy külön Windows-beállítástól ("List separator"),
+      ami gépenként eltérhet. Egy IF alapú képlet ezért az egyik gépen fut, a
+      másikon "Missing operator" hibát dob. Hogy MINDEN gépen működjön, teljesen
+      ELVÁLASZTÓ-MENTES konstrukciót használunk:
+
+      1) Let flag = (Cp*100<133) + (Cpk*100<133)
+         Egy összehasonlítás 1-et (igaz) vagy 0-t (hamis) ad; ezek összege
+         0 (mindkettő PASS), 1 vagy 2 (legalább az egyik FAIL). A kifejezésben
+         csak operátorok vannak (< és +), semmilyen elválasztó — így gépfüggetlen.
+      2) Code (0) "PASS" (1:2) "FAIL" flag Result
+         A Code parancs a numerikus flaget PASS/FAIL szöveggé alakítja. A Code
+         szintaxisa is elválasztó-mentes (zárójel + szóköz + kettőspont), tehát
+         szintén minden gépen ugyanúgy fut.
     """
     return (
-        f"Let '{COL_RESULT}' = IF("
-        f"'{COL_CP}'*100<{THRESHOLD_X100} Or '{COL_CPK}'*100<{THRESHOLD_X100}; "
-        '"FAIL"; "PASS")\n'
+        f"Let '{COL_FLAG_TMP}' = "
+        f"('{COL_CP}'*100<{THRESHOLD_X100}) + ('{COL_CPK}'*100<{THRESHOLD_X100})\n"
+        f"Code (0) \"PASS\" (1:2) \"FAIL\" '{COL_FLAG_TMP}' '{COL_RESULT}'\n"
     )
 
 
