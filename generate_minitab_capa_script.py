@@ -339,6 +339,30 @@ def build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separ
     )
 
 
+def launch_minitab(mtb_path):
+    """Elindítja a Minitabot a legenerált .mtb exec-kel (Windowson).
+
+    A .mtb a Minitab "exec" fájlkiterjesztése. Az os.startfile() gyakorlatilag
+    ugyanaz, mintha duplán kattintanál a fájlra a Fájlkezelőben: a Windows a
+    fájltársítás alapján megnyitja a Minitabbal, ami (ha a társítás "run exec")
+    le is futtatja a benne lévő parancsokat.
+
+    Csak Windowson működik (az os.startfile máshol nem létezik). Ha a társítás
+    hiányzik vagy hiba történik, csak jelezünk, és a felhasználó kézzel is meg
+    tudja nyitni (File > Run an Exec).
+    """
+    if sys.platform != "win32" or not hasattr(os, "startfile"):
+        print("Auto-indítás csak Windowson érhető el — kihagyva.")
+        print(f"Nyisd meg kézzel: Minitab > File > Run an Exec -> {mtb_path}")
+        return
+    try:
+        os.startfile(mtb_path)  # noqa: S606  (a .mtb társítás indítja a Minitabot)
+        print(f"Minitab indítása a következővel: {mtb_path}")
+    except OSError as exc:
+        print(f"Nem sikerült automatikusan elindítani a Minitabot: {exc}")
+        print(f"Nyisd meg kézzel: Minitab > File > Run an Exec -> {mtb_path}")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -352,6 +376,10 @@ def main():
     parser.add_argument(
         "--decimal-separator", choices=[",", "."],
         help="Decimal separator for the numbers (omit to pick it interactively)",
+    )
+    parser.add_argument(
+        "--no-launch", action="store_true",
+        help="Ne indítsa el automatikusan a Minitabot a kész .mtb-vel (Windows)",
     )
     args = parser.parse_args()
 
@@ -422,6 +450,10 @@ def main():
     print(f"Summary columns:                 {COL_STEP_ID}, {COL_CP}, {COL_CPK}, {COL_RESULT} "
           f"(C{n_analyzed + 1}-C{n_analyzed + 4})")
     print(f"Exec written to:                 {args.output}")
+
+    # Ha nem tiltottuk le, indítsuk el a Minitabot a friss .mtb-vel.
+    if not args.no_launch:
+        launch_minitab(os.path.abspath(args.output))
 
 
 if __name__ == "__main__":
