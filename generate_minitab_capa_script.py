@@ -62,11 +62,20 @@ VALUES_PER_LINE = 10
 COL_STEP_ID = "step_id"   # summary: a tesztlépés azonosítója (szöveg)
 COL_CP = "Cp"             # summary: Cp (Within)
 COL_CPK = "Cpk"           # summary: Cpk (Within)
+COL_RESULT = "Result"     # summary: PASS/FAIL a Cp/Cpk határérték alapján
 COL_ID_TMP = "id_tmp"     # temp: a Capa ide tárolja a változónevet (1. sor)
 COL_CP_TMP = "cp_tmp"     # temp: a Capa ide tárolja a Cp-t (1. sor)
 COL_CPK_TMP = "cpk_tmp"   # temp: a Capa ide tárolja a Cpk-t (1. sor)
 
-# A summary worksheet neve, amire a végén átmásoljuk a step_id/Cp/Cpk oszlopokat.
+# Kapabilitási határérték: FAIL, ha Cp VAGY Cpk ez alatt van.
+CAPABILITY_THRESHOLD = 1.33
+# A Minitab képletben ELKERÜLJÜK a tizedesjegyet: vesszős tizedes-beállításnál a
+# "1,33" ütközne a számformázással ("Expecting operators" hiba). Ezért a
+# Cp < 1,33 helyett Cp*100 < 133 alakot használunk — a 133 egész, nincs benne
+# vessző. (2 tizedesjegyű határértéket feltételez; ezért szorzunk 100-zal.)
+THRESHOLD_X100 = int(round(CAPABILITY_THRESHOLD * 100))
+
+# A summary worksheet neve, amire a végén átmásoljuk a summary oszlopokat.
 SUMMARY_WORKSHEET = "summary"
 
 # A script saját könyvtára. A __file__ maga a jelenlegi .py fájl elérési útja;
@@ -212,39 +221,61 @@ def build_summary_header(n_analyzed):
         f'Name C{n_analyzed + 1} "{COL_STEP_ID}"'
         f' C{n_analyzed + 2} "{COL_CP}"'
         f' C{n_analyzed + 3} "{COL_CPK}"'
-        f' C{n_analyzed + 4} "{COL_ID_TMP}"'
-        f' C{n_analyzed + 5} "{COL_CP_TMP}"'
-        f' C{n_analyzed + 6} "{COL_CPK_TMP}"\n'
+        f' C{n_analyzed + 4} "{COL_RESULT}"'
+        f' C{n_analyzed + 5} "{COL_ID_TMP}"'
+        f' C{n_analyzed + 6} "{COL_CP_TMP}"'
+        f' C{n_analyzed + 7} "{COL_CPK_TMP}"\n'
+    )
+
+
+def build_summary_result():
+    """Kiszámolja a PASS/FAIL verdict oszlopot a Cp/Cpk határérték alapján.
+
+    A loop UTÁN fut, amikor a Cp/Cpk oszlopok már fel vannak töltve. Egyetlen
+    oszlopszintű LET, ami egyszerre minden sorra kiszámolja az eredményt:
+      FAIL, ha Cp < 1,33 VAGY Cpk < 1,33; egyébként PASS.
+
+    Két Minitab-sajátosság miatt így néz ki a képlet:
+      - Cp*100 < 133  a  Cp < 1,33  helyett -> így nincs vesszős tizedes a
+        képletben (a "1,33" ütközne a számformázással).
+      - a függvény-argumentumokat PONTOSVESSZŐ választja el (nem vessző), mert
+        vesszős tizedes-beállításnál a Minitab a pontosvesszőt várja
+        (ezt a GUI Calculator capture is így generálta).
+    """
+    return (
+        f"Let '{COL_RESULT}' = IF("
+        f"'{COL_CP}'*100<{THRESHOLD_X100} Or '{COL_CPK}'*100<{THRESHOLD_X100}; "
+        '"FAIL"; "PASS")\n'
     )
 
 
 def build_summary_copy():
-    """A step_id/Cp/Cpk summary oszlopokat átmásolja egy külön, üres worksheetre.
+    """A summary oszlopokat átmásolja egy külön, üres worksheetre.
 
     Ez a futás LEGVÉGÉN fut le. Így a summary a saját "summary" nevű lapján lesz,
     a nyers adat + az összes elemzés pedig a fő worksheeten marad (elmenthető,
     átadható). A parancs pontosan az, amit a GUI generált (Data > Copy):
-      Copy 'step_id' 'Cp' 'Cpk';   -> mit másolunk
-        Newws "summary";           -> hova: ÚJ worksheet, "summary" néven
-        Varnames.                  -> az oszlopneveket is vigye át
+      Copy 'step_id' 'Cp' 'Cpk' 'Result';  -> mit másolunk
+        Newws "summary";                    -> hova: ÚJ worksheet, "summary" néven
+        Varnames.                           -> az oszlopneveket is vigye át
     """
     return (
-        f"Copy '{COL_STEP_ID}' '{COL_CP}' '{COL_CPK}';\n"
+        f"Copy '{COL_STEP_ID}' '{COL_CP}' '{COL_CPK}' '{COL_RESULT}';\n"
         f'  Newws "{SUMMARY_WORKSHEET}";\n'
         "  Varnames.\n"
     )
 
 
 def build_summary_print():
-    """Kiírja a summary táblát (step_id/Cp/Cpk) a Session ablakba.
+    """Kiírja a summary táblát (step_id/Cp/Cpk/Result) a Session ablakba.
 
     A Minitab grafikonjai nem menthetők session commanddal, viszont a report
     kézi összeállításakor (az összes output kijelölése -> Send to Report / Word)
     a Session szöveges kimenete is bekerül. Ha tehát a summary táblát Print-tel
     a Sessionbe írjuk, akkor a végső Word-reportban a chartok MELLETT ott lesz a
-    step_id/Cp/Cpk összefoglaló táblázat is — egyetlen exporttal.
+    step_id/Cp/Cpk/Result összefoglaló táblázat is — egyetlen exporttal.
     """
-    return f"Print '{COL_STEP_ID}' '{COL_CP}' '{COL_CPK}'.\n"
+    return f"Print '{COL_STEP_ID}' '{COL_CP}' '{COL_CPK}' '{COL_RESULT}'.\n"
 
 
 def build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separator):
@@ -369,10 +400,11 @@ def main():
         blocks.append(
             build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separator)
         )
-    # A legvégén a summary oszlopokat átmásoljuk egy külön "summary" worksheetre,
-    # majd Print-tel a Session ablakba is kiírjuk (hogy a kézi Word-exportba
-    # bekerüljön a chartok mellé).
+    # A loop után: kiszámoljuk a PASS/FAIL verdict oszlopot, majd a summary
+    # oszlopokat átmásoljuk egy külön "summary" worksheetre, és Print-tel a
+    # Session ablakba is kiírjuk (hogy a kézi Word-exportba bekerüljön).
     if n_analyzed:
+        blocks.append(build_summary_result())
         blocks.append(build_summary_copy())
         blocks.append(build_summary_print())
 
@@ -387,8 +419,8 @@ def main():
     print(f"Skipped (zero std dev):          {len(skipped_zero_std)}")
     print(f"Skipped (fewer than 2 points):   {len(skipped_no_variance)}")
     print(f"Capability blocks written:       {n_analyzed}")
-    print(f"Summary columns:                 {COL_STEP_ID}, {COL_CP}, {COL_CPK} "
-          f"(C{n_analyzed + 1}-C{n_analyzed + 3})")
+    print(f"Summary columns:                 {COL_STEP_ID}, {COL_CP}, {COL_CPK}, {COL_RESULT} "
+          f"(C{n_analyzed + 1}-C{n_analyzed + 4})")
     print(f"Exec written to:                 {args.output}")
 
 
