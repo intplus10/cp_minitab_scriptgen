@@ -48,6 +48,19 @@ except ImportError:
 # akárhány sorban is vannak.
 VALUES_PER_LINE = 10
 
+# --- Summary tab oszlopnevei ---------------------------------------------------
+# A Capa parancs "Storage" opciója mindig az AKTÍV worksheet 1. SORÁBA tárol, és
+# minden futásnál FELÜLÍRJA azt. Ezért két lépcsőben dolgozunk:
+#   1) a Capa a TEMP oszlopokba tárol (mindig az 1. sorba),
+#   2) egy LET átmásolja a temp 1. sorát a SUMMARY oszlop i-edik sorába.
+# Így minden test_id eredménye a saját (i-edik) sorába kerül, egymás alá gyűlve.
+COL_STEP_ID = "step_id"   # summary: a tesztlépés azonosítója (szöveg)
+COL_CP = "Cp"             # summary: Cp (Within)
+COL_CPK = "Cpk"           # summary: Cpk (Within)
+COL_ID_TMP = "id_tmp"     # temp: a Capa ide tárolja a változónevet (1. sor)
+COL_CP_TMP = "cp_tmp"     # temp: a Capa ide tárolja a Cp-t (1. sor)
+COL_CPK_TMP = "cpk_tmp"   # temp: a Capa ide tárolja a Cpk-t (1. sor)
+
 # A script saját könyvtára. A __file__ maga a jelenlegi .py fájl elérési útja;
 # abspath -> teljes (abszolút) útvonal, dirname -> ebből a mappa. Így az alapértelmezett
 # kimeneti fájl mindig a script MELLÉ kerül, függetlenül attól, honnan (melyik
@@ -179,8 +192,26 @@ def format_number(raw, decimal_separator):
     return repr(value).replace(".", decimal_separator)
 
 
-def build_capa_block(test_id, raw_values, lsl, usl, column, decimal_separator):
-    """Összeállítja egy adott test_id-hez tartozó teljes, önálló Minitab blokkot.
+def build_summary_header(n_analyzed):
+    """Létrehozza (elnevezi) a summary és temp oszlopokat, a DATA oszlopok UTÁN.
+
+    A mérési adat a C1..C<N> oszlopokba kerül (N = elemzett test_id-k száma), ezért
+    a summary/temp oszlopokat C<N+1>-től kezdve helyezzük, hogy ne ütközzenek az
+    adattal. A Name paranccsal előre elnevezzük őket, hogy a Capa storage és a LET
+    névre tudjon hivatkozni.
+    """
+    return (
+        f'Name C{n_analyzed + 1} "{COL_STEP_ID}"'
+        f' C{n_analyzed + 2} "{COL_CP}"'
+        f' C{n_analyzed + 3} "{COL_CPK}"'
+        f' C{n_analyzed + 4} "{COL_ID_TMP}"'
+        f' C{n_analyzed + 5} "{COL_CP_TMP}"'
+        f' C{n_analyzed + 6} "{COL_CPK_TMP}"\n'
+    )
+
+
+def build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separator):
+    """Összeállítja egy adott test_id-hez tartozó teljes Minitab blokkot, storage-dzsel.
 
     A blokk lépései:
       1. SET C<n> / <adatok> / END  -> az adott test_id mérési értékeit közvetlenül
@@ -191,11 +222,18 @@ def build_capa_block(test_id, raw_values, lsl, usl, column, decimal_separator):
       2. NAME C<n> "<test_id>"      -> az oszlopot elnevezzük a test_id-re, így a
                                         Capability Analysis címe a valódi tesztlépés
                                         neve lesz (nem "C1" vagy "test_value").
-      3. Capa '<test_id>' 1; ...    -> lefuttatjuk a capability analysist a
-                                        megadott LSL/USL limitekkel.
+      3. Capa '<test_id>' 1; ...    -> lefuttatjuk a capability analysist a megadott
+                                        LSL/USL limitekkel. A végén a Name/CP/CPK
+                                        storage alparancsok a TEMP oszlopokba tárolják
+                                        a változónevet, a Cp-t és a Cpk-t (1. sorba).
+      4. LET <summary>(index) = <temp>(1) -> a temp 1. sorát átmásoljuk a summary
+                                        oszlop i-edik (index) sorába, hogy minden
+                                        eredmény a saját sorába kerüljön.
 
     Minden test_id a SAJÁT oszlopába kerül (C1, C2, ...), így nem kell Subset,
     nem kell worksheet-váltogatás, és nincs esély a táblák "összekeveredésére".
+
+    index: 1-alapú sorszám (egyben a data oszlop C<index> ÉS a summary sor is).
     """
     # A mérési értékeket a helyes tizedesjellel, szóközzel elválasztva soronként
     # VALUES_PER_LINE darabonként tördeljük (csak olvashatóság miatt).
@@ -223,7 +261,13 @@ def build_capa_block(test_id, raw_values, lsl, usl, column, decimal_separator):
         "  Overall;\n"
         "  NoCI;\n"
         "  PPM;\n"
-        "  CStat.\n"
+        "  CStat;\n"
+        f"  Name '{COL_ID_TMP}';\n"
+        f"  CP '{COL_CP_TMP}';\n"
+        f"  CPK '{COL_CPK_TMP}'.\n"
+        f"LET '{COL_STEP_ID}'({index}) = '{COL_ID_TMP}'(1)\n"
+        f"LET '{COL_CP}'({index}) = '{COL_CP_TMP}'(1)\n"
+        f"LET '{COL_CPK}'({index}) = '{COL_CPK_TMP}'(1)\n"
     )
 
 
@@ -249,11 +293,13 @@ def main():
 
     order, values, limits = load_test_steps(csv_path)
 
-    # Statisztika a végső összefoglalóhoz: hány test_id-t hagytunk ki és miért.
+    # 1. MENET: eldöntjük, mely test_id-k kerülnek elemzésre (a 0 szórásúakat
+    # kihagyjuk), és összegyűjtjük a szükséges adatokat. Azért külön menetben,
+    # mert a summary/temp oszlopok helyéhez előre tudni kell az elemzett
+    # test_id-k SZÁMÁT (N), hogy a data oszlopok (C1..C<N>) után helyezzük őket.
     skipped_zero_std = []
     skipped_no_variance = []
-    blocks = []
-    column_index = 0   # melyik oszlopba (C1, C2, ...) írjuk a következő test_id-t
+    analyzed = []   # (test_id, raw_values, lsl, usl) az elemzendő lépésekhez
 
     for test_id in order:
         # A nyers string értékeket float()-oljuk, hogy szórást tudjunk számolni.
@@ -270,17 +316,26 @@ def main():
             skipped_zero_std.append(test_id)
             continue
 
-        column_index += 1
-        column = f"C{column_index}"
         lower_raw, upper_raw = limits[test_id]
         lsl = format_number(lower_raw, decimal_separator)
         usl = format_number(upper_raw, decimal_separator)
+        analyzed.append((test_id, values[test_id], lsl, usl))
+
+    n_analyzed = len(analyzed)
+
+    # 2. MENET: a parancsblokkok összeállítása. A summary/temp oszlopok neveit
+    # a header hozza létre (a data oszlopok után), majd minden blokk a saját
+    # C<index> oszlopába teszi az adatot és a summary <index>. sorába az eredményt.
+    blocks = [build_summary_header(n_analyzed)]
+    for index, (test_id, raw_values, lsl, usl) in enumerate(analyzed, start=1):
+        column = f"C{index}"
         blocks.append(
-            build_capa_block(test_id, values[test_id], lsl, usl, column, decimal_separator)
+            build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separator)
         )
 
     # Az önálló exec: minden blokkot üres sorral elválasztva egyetlen fájlba.
-    # Minitabban File > Run an Exec -> betölti az inline adatot ÉS lefuttat mindent.
+    # Minitabban File > Run an Exec -> betölti az inline adatot, lefuttat minden
+    # elemzést, ÉS feltölti a step_id/Cp/Cpk summary oszlopokat.
     with open(args.output, "w", encoding="utf-8") as f:
         f.write("\n".join(blocks))
 
@@ -288,7 +343,9 @@ def main():
     print(f"Total test_id steps found:       {total}")
     print(f"Skipped (zero std dev):          {len(skipped_zero_std)}")
     print(f"Skipped (fewer than 2 points):   {len(skipped_no_variance)}")
-    print(f"Capability blocks written:       {len(blocks)}")
+    print(f"Capability blocks written:       {n_analyzed}")
+    print(f"Summary columns:                 {COL_STEP_ID}, {COL_CP}, {COL_CPK} "
+          f"(C{n_analyzed + 1}-C{n_analyzed + 3})")
     print(f"Exec written to:                 {args.output}")
 
 

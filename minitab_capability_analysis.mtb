@@ -1,3 +1,5 @@
+Name C83 "step_id" C84 "Cp" C85 "Cpk" C86 "id_tmp" C87 "cp_tmp" C88 "cpk_tmp"
+
 SET C1
   15,529 14,666 15,377 15,427 13,645 15,928 13,606 13,247 13,067 13,048
   16,891 15,16 13,988 13,415 16,161 11,926 13,958 15,005 15,45 14,761
@@ -20,7 +22,13 @@ Capa 'SKP600-72' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(1) = 'id_tmp'(1)
+LET 'Cp'(1) = 'cp_tmp'(1)
+LET 'Cpk'(1) = 'cpk_tmp'(1)
 
 SET C2
   6,96081375454325 6,91212309747558 7,00691967960787 7,03061874235624 6,80824577374436 6,92233243275611 6,96485542570649 6,97491501902467 7,05585592161496 6,98334710882517
@@ -44,7 +52,13 @@ Capa 'SKP500-01' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(2) = 'id_tmp'(1)
+LET 'Cp'(2) = 'cp_tmp'(1)
+LET 'Cpk'(2) = 'cpk_tmp'(1)
 
 SET C3
   11,85 11,95 11,894 11,906 11,956 11,894 11,967 11,967 11,995 11,871
@@ -68,7 +82,13 @@ Capa 'M600-5' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(3) = 'id_tmp'(1)
+LET 'Cp'(3) = 'cp_tmp'(1)
+LET 'Cpk'(3) = 'cpk_tmp'(1)
 
 SET C4
   17,479 17,074 17,727 17,396 16,016 18,121 15,933 16,211 15,372 14,998
@@ -92,7 +112,13 @@ Capa 'SKP600-79' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(4) = 'id_tmp'(1)
+LET 'Cp'(4) = 'cp_tmp'(1)
+LET 'Cpk'(4) = 'cpk_tmp'(1)
 
 SET C5
   9,838 10,244 10,188 9,65 10,138 10,746 9,612 10,148 9,956 9,225
@@ -116,7 +142,13 @@ Capa 'OSKP600-78' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(5) = 'id_tmp'(1)
+LET 'Cp'(5) = 'cp_tmp'(1)
+LET 'Cpk'(5) = 'cpk_tmp'(1)
 
 SET C6
   7,34599837767754 7,33455155053293 7,31959628279358 7,29409139913324 7,51675561407531 7,51018184615116 7,34381137422424 7,23596450539892 7,22482016655925 7,2247410509807
@@ -140,7 +172,13 @@ Capa 'M400-8' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(6) = 'id_tmp'(1)
+LET 'Cp'(6) = 'cp_tmp'(1)
+LET 'Cpk'(6) = 'cpk_tmp'(1)
 
 SET C7
   6,905 6,715 6,673 6,859 7,04 6,734 6,738 7,041 7,165 6,905
@@ -164,7 +202,13 @@ Capa 'SKP600-13' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(7) = 'id_tmp'(1)
+LET 'Cp'(7) = 'cp_tmp'(1)
+LET 'Cpk'(7) = 'cpk_tmp'(1)
 
 SET C8
   61,7 59,66 59,22 60,84 62,74 65,32 60,16 60,1 61,72 60,48
@@ -188,7 +232,13 @@ Capa 'SKP400-04' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(8) = 'id_tmp'(1)
+LET 'Cp'(8) = 'cp_tmp'(1)
+LET 'Cpk'(8) = 'cpk_tmp'(1)
 
 SET C9
   16,866 15,786 17,011 16,752 14,586 17,596 14,576 14,469 13,978 13,858
@@ -212,7 +262,13 @@ Capa 'SKP600-73' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(9) = 'id_tmp'(1)
+LET 'Cp'(9) = 'cp_tmp'(1)
+LET 'Cpk'(9) = 'cpk_tmp'(1)
 
 SET C10
   12,896 13,202 13,007 12,504 13,14 13,245 12,876 13,703 12,605 12,771
@@ -236,7 +292,13 @@ Capa 'SKP600-78' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(10) = 'id_tmp'(1)
+LET 'Cp'(10) = 'cp_tmp'(1)
+LET 'Cpk'(10) = 'cpk_tmp'(1)
 
 SET C11
   -0,0903261254055846 -0,109321645736428 -0,0428125163303235 -0,0134631317034824 -0,264988711333213 -0,154136261788006 -0,107866779651501 -0,0919109761394871 -0,0315879811189159 -0,070866550796267
@@ -260,7 +322,13 @@ Capa 'M500-6' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(11) = 'id_tmp'(1)
+LET 'Cp'(11) = 'cp_tmp'(1)
+LET 'Cpk'(11) = 'cpk_tmp'(1)
 
 SET C12
   6,97171568494291 6,9179917394142 6,82554678408488 6,88334186992151 7,01378326623976 7,05068529508836 6,9354098523248 6,87092716048675 6,85714881356189 6,83113403616851
@@ -284,7 +352,13 @@ Capa 'SKP400-01' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(12) = 'id_tmp'(1)
+LET 'Cp'(12) = 'cp_tmp'(1)
+LET 'Cpk'(12) = 'cpk_tmp'(1)
 
 SET C13
   4,229 4,194 4,592 4,29 4,433 4,302 4,229 4,152 3,327 4,19
@@ -308,7 +382,13 @@ Capa 'OSKP600-70' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(13) = 'id_tmp'(1)
+LET 'Cp'(13) = 'cp_tmp'(1)
+LET 'Cpk'(13) = 'cpk_tmp'(1)
 
 SET C14
   8,1 8,1 8,1 8,1 8,1 8,1 8,1 8,1 8,1 8,1
@@ -332,7 +412,13 @@ Capa 'M200-5' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(14) = 'id_tmp'(1)
+LET 'Cp'(14) = 'cp_tmp'(1)
+LET 'Cpk'(14) = 'cpk_tmp'(1)
 
 SET C15
   8,1 8 8,1 8,1 8,1 8,1 8,1 8,1 8,1 8,1
@@ -356,7 +442,13 @@ Capa 'M400-5' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(15) = 'id_tmp'(1)
+LET 'Cp'(15) = 'cp_tmp'(1)
+LET 'Cpk'(15) = 'cpk_tmp'(1)
 
 SET C16
   56,48 54,18 54,22 54,8 56,32 56,64 55,56 56,7 56,5 55,54
@@ -380,7 +472,13 @@ Capa 'SKP500-04' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(16) = 'id_tmp'(1)
+LET 'Cp'(16) = 'cp_tmp'(1)
+LET 'Cpk'(16) = 'cpk_tmp'(1)
 
 SET C17
   -8,2 -8,1 -8,2 -8,1 -8,1 -7,9 -7,9 -7,8 -8,2 -8
@@ -404,7 +502,13 @@ Capa 'M700-6' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(17) = 'id_tmp'(1)
+LET 'Cp'(17) = 'cp_tmp'(1)
+LET 'Cpk'(17) = 'cpk_tmp'(1)
 
 SET C18
   11,22 11,37 11,455 10,845 11,359 11,848 10,755 11,571 11,286 10,608
@@ -428,7 +532,13 @@ Capa 'OSKP600-77' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(18) = 'id_tmp'(1)
+LET 'Cp'(18) = 'cp_tmp'(1)
+LET 'Cpk'(18) = 'cpk_tmp'(1)
 
 SET C19
   0,374282692734635 0,416559811118728 0,494049498708704 0,41074952921173 0,502972347835552 0,459496551062801 0,408401521899441 0,365037344912168 0,367671352997366 0,393607014812192
@@ -452,7 +562,13 @@ Capa 'M400-6' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(19) = 'id_tmp'(1)
+LET 'Cp'(19) = 'cp_tmp'(1)
+LET 'Cpk'(19) = 'cpk_tmp'(1)
 
 SET C20
   179,256565726251 179,041466849751 179,253792517861 179,221427346495 179,261588569518 179,25864785504 179,271475172062 179,266237565394 179,055098476747 179,242912576125
@@ -476,7 +592,13 @@ Capa 'M500-9' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(20) = 'id_tmp'(1)
+LET 'Cp'(20) = 'cp_tmp'(1)
+LET 'Cpk'(20) = 'cpk_tmp'(1)
 
 SET C21
   7,2 7,2 7,2 7,2 7,2 7,2 7,2 7,2 7,2 7,2
@@ -500,7 +622,13 @@ Capa 'M700-14-1' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(21) = 'id_tmp'(1)
+LET 'Cp'(21) = 'cp_tmp'(1)
+LET 'Cpk'(21) = 'cpk_tmp'(1)
 
 SET C22
   12,288 12,564 12,565 12,199 11,662 12,82 11,731 12,315 11,985 11,427
@@ -524,7 +652,13 @@ Capa 'OSKP600-76' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(22) = 'id_tmp'(1)
+LET 'Cp'(22) = 'cp_tmp'(1)
+LET 'Cpk'(22) = 'cpk_tmp'(1)
 
 SET C23
   62,18 61,88 58,68 60,44 62,66 63,4 63,7 59,72 62,3 61,04
@@ -548,7 +682,13 @@ Capa 'SKP300-04' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(23) = 'id_tmp'(1)
+LET 'Cp'(23) = 'cp_tmp'(1)
+LET 'Cpk'(23) = 'cpk_tmp'(1)
 
 SET C24
   -6,84677978596452 -7,44600908142369 -6,59728261152534 -6,70486259217328 -6,83736382129316 -6,79631735249447 -7,00573878492614 -6,6989353991396 -6,77025276870877 -6,73540210661572
@@ -572,7 +712,13 @@ Capa 'M300-8' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(24) = 'id_tmp'(1)
+LET 'Cp'(24) = 'cp_tmp'(1)
+LET 'Cpk'(24) = 'cpk_tmp'(1)
 
 SET C25
   8,15555098996498 8,2516514371708 8,24755119835027 8,17202233561315 8,15382642599754 8,16579278822057 8,15956324082799 8,19855950360186 8,18761380168609 8,37356755111367
@@ -596,7 +742,13 @@ Capa 'M600-0' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(25) = 'id_tmp'(1)
+LET 'Cp'(25) = 'cp_tmp'(1)
+LET 'Cpk'(25) = 'cpk_tmp'(1)
 
 SET C26
   -7,3 -7,3 -7,3 -7,3 -7,3 -7,3 -7,3 -7,3 -7,3 -7,3
@@ -620,7 +772,13 @@ Capa 'M700-14-2' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(26) = 'id_tmp'(1)
+LET 'Cp'(26) = 'cp_tmp'(1)
+LET 'Cpk'(26) = 'cpk_tmp'(1)
 
 SET C27
   6,503 6,608 6,563 6,588 6,605 6,585 6,615 6,614 6,625 6,525
@@ -644,7 +802,13 @@ Capa 'M600-3' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(27) = 'id_tmp'(1)
+LET 'Cp'(27) = 'cp_tmp'(1)
+LET 'Cpk'(27) = 'cpk_tmp'(1)
 
 SET C28
   4,584 4,607 4,584 4,62 4,72 4,638 4,506 4,717 4,665 4,652
@@ -668,7 +832,13 @@ Capa 'SKP600-12' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(28) = 'id_tmp'(1)
+LET 'Cp'(28) = 'cp_tmp'(1)
+LET 'Cpk'(28) = 'cpk_tmp'(1)
 
 SET C29
   16,943 17,06 17,203 16,904 15,767 17,594 15,816 15,639 15,296 14,317
@@ -692,7 +862,13 @@ Capa 'SKP600-75' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(29) = 'id_tmp'(1)
+LET 'Cp'(29) = 'cp_tmp'(1)
+LET 'Cpk'(29) = 'cpk_tmp'(1)
 
 SET C30
   114331 114332 114330 114340 114343 114342 114333 114305 114307 114304
@@ -716,7 +892,13 @@ Capa '69420' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(30) = 'id_tmp'(1)
+LET 'Cp'(30) = 'cp_tmp'(1)
+LET 'Cpk'(30) = 'cpk_tmp'(1)
 
 SET C31
   0,30847965724452 0,33294980358036 0,36655344274017 0,384847287085874 0,3317412246189 0,321742550340812 0,328773285533743 0,383353769791454 0,360323698335848 0,394019020915515
@@ -740,7 +922,13 @@ Capa 'M200-6' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(31) = 'id_tmp'(1)
+LET 'Cp'(31) = 'cp_tmp'(1)
+LET 'Cpk'(31) = 'cpk_tmp'(1)
 
 SET C32
   179,294079136508 179,295068264656 179,296057392804 179,296057392804 179,293796528465 179,29570413275 179,295845436774 179,290263927937 179,295562828731 179,295704132753
@@ -764,7 +952,13 @@ Capa 'M200-9' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(32) = 'id_tmp'(1)
+LET 'Cp'(32) = 'cp_tmp'(1)
+LET 'Cpk'(32) = 'cpk_tmp'(1)
 
 SET C33
   0 0 0 0 0 0 0 0 0 0
@@ -788,7 +982,13 @@ Capa 'M200-10' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(33) = 'id_tmp'(1)
+LET 'Cp'(33) = 'cp_tmp'(1)
+LET 'Cpk'(33) = 'cpk_tmp'(1)
 
 SET C34
   0 0 0 0 0 0 0 0 0 0
@@ -812,7 +1012,13 @@ Capa 'M400-10' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(34) = 'id_tmp'(1)
+LET 'Cp'(34) = 'cp_tmp'(1)
+LET 'Cpk'(34) = 'cpk_tmp'(1)
 
 SET C35
   0 0 0 0 0,1 0 0 0,1 0 0
@@ -836,7 +1042,13 @@ Capa 'M500-10' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(35) = 'id_tmp'(1)
+LET 'Cp'(35) = 'cp_tmp'(1)
+LET 'Cpk'(35) = 'cpk_tmp'(1)
 
 SET C36
   0,1 0 0,1 0,1 0,1 0,1 0,1 0,1 0,1 0
@@ -860,7 +1072,13 @@ Capa 'M100-3' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(36) = 'id_tmp'(1)
+LET 'Cp'(36) = 'cp_tmp'(1)
+LET 'Cpk'(36) = 'cpk_tmp'(1)
 
 SET C37
   0,1 0 0,1 0 0,1 0,1 0 0,1 0,1 0
@@ -884,7 +1102,13 @@ Capa 'M300-10' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(37) = 'id_tmp'(1)
+LET 'Cp'(37) = 'cp_tmp'(1)
+LET 'Cpk'(37) = 'cpk_tmp'(1)
 
 SET C38
   5,521 5,509 5,508 5,482 5,485 5,502 5,468 5,494 5,463 5,484
@@ -908,7 +1132,13 @@ Capa 'OM600-5' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(38) = 'id_tmp'(1)
+LET 'Cp'(38) = 'cp_tmp'(1)
+LET 'Cpk'(38) = 'cpk_tmp'(1)
 
 SET C39
   5,521 5,509 5,508 5,482 5,485 5,502 5,468 5,494 5,463 5,484
@@ -932,7 +1162,13 @@ Capa 'OSKP600-03' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(39) = 'id_tmp'(1)
+LET 'Cp'(39) = 'cp_tmp'(1)
+LET 'Cpk'(39) = 'cpk_tmp'(1)
 
 SET C40
   6,82398202288238 6,90012015386067 6,54030352624334 6,6747332462429 6,80923251622388 6,75584949593968 6,98750549622568 6,68640919935423 6,76789272685406 6,72687772231713
@@ -956,7 +1192,13 @@ Capa 'SKP300-01' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(40) = 'id_tmp'(1)
+LET 'Cp'(40) = 'cp_tmp'(1)
+LET 'Cpk'(40) = 'cpk_tmp'(1)
 
 SET C41
   53,84 61,04 56 56,52 73,4 59,44 67,32 73,28 76 62,48
@@ -980,7 +1222,13 @@ Capa 'OSKP600-04' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(41) = 'id_tmp'(1)
+LET 'Cp'(41) = 'cp_tmp'(1)
+LET 'Cpk'(41) = 'cpk_tmp'(1)
 
 SET C42
   7,27756198784353 7,31080730911679 7,40323092627433 7,38936922042266 7,33648206485997 7,31471831318789 7,33739953093584 7,35677158606217 7,41958004579983 7,41720293096516
@@ -1004,7 +1252,13 @@ Capa 'M200-8' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(42) = 'id_tmp'(1)
+LET 'Cp'(42) = 'cp_tmp'(1)
+LET 'Cpk'(42) = 'cpk_tmp'(1)
 
 SET C43
   13,453 13,128 13,431 13,549 12,38 13,723 12,174 12,008 11,942 11,942
@@ -1028,7 +1282,13 @@ Capa 'SKP600-71' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(43) = 'id_tmp'(1)
+LET 'Cp'(43) = 'cp_tmp'(1)
+LET 'Cpk'(43) = 'cpk_tmp'(1)
 
 SET C44
   75,9 84,1 78,75 78,7 100,4 82,7 92,15 99,5 103,1 85,9
@@ -1052,7 +1312,13 @@ Capa 'OSKP600-041' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(44) = 'id_tmp'(1)
+LET 'Cp'(44) = 'cp_tmp'(1)
+LET 'Cpk'(44) = 'cpk_tmp'(1)
 
 SET C45
   14,6 14,841 14,777 14,359 14,608 15,013 14,635 15,276 13,916 14,369
@@ -1076,7 +1342,13 @@ Capa 'SKP600-77' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(45) = 'id_tmp'(1)
+LET 'Cp'(45) = 'cp_tmp'(1)
+LET 'Cpk'(45) = 'cpk_tmp'(1)
 
 SET C46
   -1 -1 -1,1 -1,2 -1,1 -1,1 -1 -0,7 -1 -0,8
@@ -1100,7 +1372,13 @@ Capa 'M500-1' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(46) = 'id_tmp'(1)
+LET 'Cp'(46) = 'cp_tmp'(1)
+LET 'Cpk'(46) = 'cpk_tmp'(1)
 
 SET C47
   -0,9 -0,9 -0,9 -0,9 -0,9 -0,9 -0,9 -0,9 -0,9 -0,9
@@ -1124,7 +1402,13 @@ Capa 'M300-2' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(47) = 'id_tmp'(1)
+LET 'Cp'(47) = 'cp_tmp'(1)
+LET 'Cpk'(47) = 'cpk_tmp'(1)
 
 SET C48
   -0,9 -0,8 -0,9 -1 -0,9 -0,9 -0,8 -0,9 -0,9 -0,9
@@ -1148,7 +1432,13 @@ Capa 'M500-2' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(48) = 'id_tmp'(1)
+LET 'Cp'(48) = 'cp_tmp'(1)
+LET 'Cpk'(48) = 'cpk_tmp'(1)
 
 SET C49
   4,828 4,856 4,82 4,822 4,979 4,917 4,778 4,91 4,953 4,942
@@ -1172,7 +1462,13 @@ Capa 'OSKP600-12' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(49) = 'id_tmp'(1)
+LET 'Cp'(49) = 'cp_tmp'(1)
+LET 'Cpk'(49) = 'cpk_tmp'(1)
 
 SET C50
   7 7 7,1 7,1 7,1 7,1 7,1 7,1 7,1 7,1
@@ -1196,7 +1492,13 @@ Capa 'M200-4' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(50) = 'id_tmp'(1)
+LET 'Cp'(50) = 'cp_tmp'(1)
+LET 'Cpk'(50) = 'cpk_tmp'(1)
 
 SET C51
   11,79 11,091 11,944 11,674 9,497 11,344 10,351 10,091 9,722 10,375
@@ -1220,7 +1522,13 @@ Capa 'OSKP600-72' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(51) = 'id_tmp'(1)
+LET 'Cp'(51) = 'cp_tmp'(1)
+LET 'Cpk'(51) = 'cpk_tmp'(1)
 
 SET C52
   17,477 16,479 17,726 17,381 15,023 18,097 15,005 15,059 14,47 14,181
@@ -1244,7 +1552,13 @@ Capa 'SKP600-74' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(52) = 'id_tmp'(1)
+LET 'Cp'(52) = 'cp_tmp'(1)
+LET 'Cpk'(52) = 'cpk_tmp'(1)
 
 SET C53
   7,3 7,3 7,1 7,2 7,4 7,4 7,3 7,2 7,1 7,1
@@ -1268,7 +1582,13 @@ Capa 'M400-4' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(53) = 'id_tmp'(1)
+LET 'Cp'(53) = 'cp_tmp'(1)
+LET 'Cpk'(53) = 'cpk_tmp'(1)
 
 SET C54
   0,02 0,021 0,021 0,023 0,021 0,021 0,021 0,02 0,02 0,02
@@ -1292,7 +1612,13 @@ Capa 'M700-1' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(54) = 'id_tmp'(1)
+LET 'Cp'(54) = 'cp_tmp'(1)
+LET 'Cpk'(54) = 'cpk_tmp'(1)
 
 SET C55
   9,71 9,377 9,762 9,662 8,282 9,296 8,95 8,608 8,365 8,976
@@ -1316,7 +1642,13 @@ Capa 'OSKP600-71' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(55) = 'id_tmp'(1)
+LET 'Cp'(55) = 'cp_tmp'(1)
+LET 'Cpk'(55) = 'cpk_tmp'(1)
 
 SET C56
   13,511 12,826 13,797 13,391 10,674 13,863 11,613 11,765 11,319 11,438
@@ -1340,7 +1672,13 @@ Capa 'OSKP600-74' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(56) = 'id_tmp'(1)
+LET 'Cp'(56) = 'cp_tmp'(1)
+LET 'Cpk'(56) = 'cpk_tmp'(1)
 
 SET C57
   13,471 13,47 13,47 13,471 13,471 13,47 13,47 13,47 13,471 13,47
@@ -1364,7 +1702,13 @@ Capa 'M001-3' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(57) = 'id_tmp'(1)
+LET 'Cp'(57) = 'cp_tmp'(1)
+LET 'Cpk'(57) = 'cpk_tmp'(1)
 
 SET C58
   13,118 13,098 13,377 13,03 10,856 13,63 12,137 12,545 12,007 11,833
@@ -1388,7 +1732,13 @@ Capa 'OSKP600-75' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(58) = 'id_tmp'(1)
+LET 'Cp'(58) = 'cp_tmp'(1)
+LET 'Cpk'(58) = 'cpk_tmp'(1)
 
 SET C59
   -8,1 -8,2 -8,1 -8,1 -8,2 -8 -8,1 -7,9 -8,2 -8,1
@@ -1412,7 +1762,13 @@ Capa 'M700-7' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(59) = 'id_tmp'(1)
+LET 'Cp'(59) = 'cp_tmp'(1)
+LET 'Cpk'(59) = 'cpk_tmp'(1)
 
 SET C60
   -8,1 -8 -8 -8,1 -8,1 -8 -8,1 -8 -8,1 -8,1
@@ -1436,7 +1792,13 @@ Capa 'M300-5' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(60) = 'id_tmp'(1)
+LET 'Cp'(60) = 'cp_tmp'(1)
+LET 'Cpk'(60) = 'cpk_tmp'(1)
 
 SET C61
   13,125 12,084 13,34 12,921 10,356 12,839 11,23 11,217 10,783 11,008
@@ -1460,7 +1822,13 @@ Capa 'OSKP600-73' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(61) = 'id_tmp'(1)
+LET 'Cp'(61) = 'cp_tmp'(1)
+LET 'Cpk'(61) = 'cpk_tmp'(1)
 
 SET C62
   0,3 0,3 0,4 0,4 0,4 0,4 0,3 0,3 0,3 0,3
@@ -1484,7 +1852,13 @@ Capa 'M400-1' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(62) = 'id_tmp'(1)
+LET 'Cp'(62) = 'cp_tmp'(1)
+LET 'Cpk'(62) = 'cpk_tmp'(1)
 
 SET C63
   57,8 58,66 58,9 58,76 59,46 59,78 58,16 57,42 58,86 59,26
@@ -1508,7 +1882,13 @@ Capa 'SKP200-04' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(63) = 'id_tmp'(1)
+LET 'Cp'(63) = 'cp_tmp'(1)
+LET 'Cpk'(63) = 'cpk_tmp'(1)
 
 SET C64
   -7,05113987994884 -7,02144474321201 -7,0497321959382 -7,04408187405972 -7,07323448507757 -7,07646869454412 -7,07272220535799 -7,06682599516416 -7,08744390273387 -7,05421365962144
@@ -1532,7 +1912,13 @@ Capa 'M500-8' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(64) = 'id_tmp'(1)
+LET 'Cp'(64) = 'cp_tmp'(1)
+LET 'Cpk'(64) = 'cpk_tmp'(1)
 
 SET C65
   173,95 190,85 178,15 173,55 193,9 173,7 194,7 210,75 211,85 197,05
@@ -1556,7 +1942,13 @@ Capa 'SKP600-04' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(65) = 'id_tmp'(1)
+LET 'Cp'(65) = 'cp_tmp'(1)
+LET 'Cpk'(65) = 'cpk_tmp'(1)
 
 SET C66
   176,856842119873 176,856842119873 176,856842119873 176,856842119873 176,856842119873 176,856842119873 176,856842119873 176,856842119873 176,856842119873 176,856842119873
@@ -1580,7 +1972,13 @@ Capa 'M300-9' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(66) = 'id_tmp'(1)
+LET 'Cp'(66) = 'cp_tmp'(1)
+LET 'Cpk'(66) = 'cpk_tmp'(1)
 
 SET C67
   -7,4 -7,4 -7,2 -7,2 -7,5 -7,4 -7,5 -7,3 -7,3 -7,3
@@ -1604,7 +2002,13 @@ Capa 'M300-4' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(67) = 'id_tmp'(1)
+LET 'Cp'(67) = 'cp_tmp'(1)
+LET 'Cpk'(67) = 'cpk_tmp'(1)
 
 SET C68
   -7,4 -7,3 -7,4 -7,4 -7,3 -7,3 -7,4 -7,5 -7,4 -7,4
@@ -1628,7 +2032,13 @@ Capa 'M500-4' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(68) = 'id_tmp'(1)
+LET 'Cp'(68) = 'cp_tmp'(1)
+LET 'Cpk'(68) = 'cpk_tmp'(1)
 
 SET C69
   5,346 5,342 5,331 5,318 5,351 5,309 5,353 5,353 5,37 5,345
@@ -1652,7 +2062,13 @@ Capa 'SKP600-03' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(69) = 'id_tmp'(1)
+LET 'Cp'(69) = 'cp_tmp'(1)
+LET 'Cpk'(69) = 'cpk_tmp'(1)
 
 SET C70
   0,2 0,2 0,3 0,3 0,2 0,2 0,2 0,3 0,2 0,2
@@ -1676,7 +2092,13 @@ Capa 'M200-1' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(70) = 'id_tmp'(1)
+LET 'Cp'(70) = 'cp_tmp'(1)
+LET 'Cpk'(70) = 'cpk_tmp'(1)
 
 SET C71
   0,73 0,694 0,628 0,708 0,692 0,699 0,658 0,705 0,742 0,693
@@ -1700,7 +2122,13 @@ Capa 'SKP600-14' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(71) = 'id_tmp'(1)
+LET 'Cp'(71) = 'cp_tmp'(1)
+LET 'Cpk'(71) = 'cpk_tmp'(1)
 
 SET C72
   0,736 0,672 0,674 0,674 0,685 0,716 0,701 0,707 0,736 0,704
@@ -1724,7 +2152,13 @@ Capa 'OSKP600-14' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(72) = 'id_tmp'(1)
+LET 'Cp'(72) = 'cp_tmp'(1)
+LET 'Cpk'(72) = 'cpk_tmp'(1)
 
 SET C73
   15,93 16,446 16,165 15,836 15,866 16,528 15,724 16,169 15,098 14,991
@@ -1748,7 +2182,13 @@ Capa 'SKP600-76' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(73) = 'id_tmp'(1)
+LET 'Cp'(73) = 'cp_tmp'(1)
+LET 'Cpk'(73) = 'cpk_tmp'(1)
 
 SET C74
   8,2 8,1 8,1 8,2 8 8,2 8,2 8,1 8,2 8,1
@@ -1772,7 +2212,13 @@ Capa 'M700-10' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(74) = 'id_tmp'(1)
+LET 'Cp'(74) = 'cp_tmp'(1)
+LET 'Cpk'(74) = 'cpk_tmp'(1)
 
 SET C75
   8,2 8,2 8,1 8,2 8,1 8,1 8,2 8,2 8,2 8,1
@@ -1796,7 +2242,13 @@ Capa 'M700-11' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(75) = 'id_tmp'(1)
+LET 'Cp'(75) = 'cp_tmp'(1)
+LET 'Cpk'(75) = 'cpk_tmp'(1)
 
 SET C76
   13,542 13,148 13,825 13,405 11,72 13,892 12,139 12,613 12,178 11,837
@@ -1820,7 +2272,13 @@ Capa 'OSKP600-79' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(76) = 'id_tmp'(1)
+LET 'Cp'(76) = 'cp_tmp'(1)
+LET 'Cpk'(76) = 'cpk_tmp'(1)
 
 SET C77
   8,185 8,24 8,207 8,195 8,153 8,125 8,161 8,214 8,167 8,381
@@ -1844,7 +2302,13 @@ Capa 'SKP600-70' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(77) = 'id_tmp'(1)
+LET 'Cp'(77) = 'cp_tmp'(1)
+LET 'Cpk'(77) = 'cpk_tmp'(1)
 
 SET C78
   7,101 7,105 7,063 7,051 7,247 7,202 6,995 7,236 7,344 7,221
@@ -1868,7 +2332,13 @@ Capa 'OSKP600-13' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(78) = 'id_tmp'(1)
+LET 'Cp'(78) = 'cp_tmp'(1)
+LET 'Cpk'(78) = 'cpk_tmp'(1)
 
 SET C79
   -0,5 -0,4 -0,5 -0,5 -0,5 -0,5 -0,5 -0,5 -0,5 -0,5
@@ -1892,7 +2362,13 @@ Capa 'M300-1' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(79) = 'id_tmp'(1)
+LET 'Cp'(79) = 'cp_tmp'(1)
+LET 'Cpk'(79) = 'cpk_tmp'(1)
 
 SET C80
   6,96908233059901 6,97785750553643 7,03667748353416 7,00452193333679 7,00474084024107 6,99297576284707 7,0086262454021 6,97341781627072 7,05925634746398 7,02318391004965
@@ -1916,7 +2392,13 @@ Capa 'SKP200-01' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(80) = 'id_tmp'(1)
+LET 'Cp'(80) = 'cp_tmp'(1)
+LET 'Cpk'(80) = 'cpk_tmp'(1)
 
 SET C81
   -0,0227977630821317 -0,545888927563014 -0,0569790852820077 -0,0301293459303757 -0,0281313050692735 -0,040467856554785 -0,018233288700464 -0,0125261997853743 -0,00236004185471085 -0,00852438429858702
@@ -1940,7 +2422,13 @@ Capa 'M300-6' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(81) = 'id_tmp'(1)
+LET 'Cp'(81) = 'cp_tmp'(1)
+LET 'Cpk'(81) = 'cpk_tmp'(1)
 
 SET C82
   0,162 0,162 0,165 0,163 0,162 0,163 0,159 0,159 0,162 0,161
@@ -1964,4 +2452,10 @@ Capa 'M001-2' 1;
   Overall;
   NoCI;
   PPM;
-  CStat.
+  CStat;
+  Name 'id_tmp';
+  CP 'cp_tmp';
+  CPK 'cpk_tmp'.
+LET 'step_id'(82) = 'id_tmp'(1)
+LET 'Cp'(82) = 'cp_tmp'(1)
+LET 'Cpk'(82) = 'cpk_tmp'(1)
