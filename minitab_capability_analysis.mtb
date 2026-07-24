@@ -2459,3 +2459,7 @@ Capa 'M001-2' 1;
 LET 'step_id'(82) = 'id_tmp'(1)
 LET 'Cp'(82) = 'cp_tmp'(1)
 LET 'Cpk'(82) = 'cpk_tmp'(1)
+
+Copy 'step_id' 'Cp' 'Cpk';
+  Newws "summary";
+  Varnames.

@@ -49,17 +49,25 @@ except ImportError:
 VALUES_PER_LINE = 10
 
 # --- Summary tab oszlopnevei ---------------------------------------------------
-# A Capa parancs "Storage" opciója mindig az AKTÍV worksheet 1. SORÁBA tárol, és
-# minden futásnál FELÜLÍRJA azt. Ezért két lépcsőben dolgozunk:
+# Minden test_id a SAJÁT adatoszlopába kerül (C1, C2, ... C<N>). Ez szándékos:
+# így a kész Minitab projekt minden nyers adatot megőriz, elmenthető és átadható
+# másoknak további elemzésre.
+#
+# A Capa "Storage" opciója mindig az AKTÍV worksheet 1. SORÁBA tárol, és minden
+# futásnál FELÜLÍRJA azt. Ezért két lépcsőben dolgozunk:
 #   1) a Capa a TEMP oszlopokba tárol (mindig az 1. sorba),
 #   2) egy LET átmásolja a temp 1. sorát a SUMMARY oszlop i-edik sorába.
 # Így minden test_id eredménye a saját (i-edik) sorába kerül, egymás alá gyűlve.
+# A futás végén a summary oszlopokat átmásoljuk egy külön "summary" worksheetre.
 COL_STEP_ID = "step_id"   # summary: a tesztlépés azonosítója (szöveg)
 COL_CP = "Cp"             # summary: Cp (Within)
 COL_CPK = "Cpk"           # summary: Cpk (Within)
 COL_ID_TMP = "id_tmp"     # temp: a Capa ide tárolja a változónevet (1. sor)
 COL_CP_TMP = "cp_tmp"     # temp: a Capa ide tárolja a Cp-t (1. sor)
 COL_CPK_TMP = "cpk_tmp"   # temp: a Capa ide tárolja a Cpk-t (1. sor)
+
+# A summary worksheet neve, amire a végén átmásoljuk a step_id/Cp/Cpk oszlopokat.
+SUMMARY_WORKSHEET = "summary"
 
 # A script saját könyvtára. A __file__ maga a jelenlegi .py fájl elérési útja;
 # abspath -> teljes (abszolút) útvonal, dirname -> ebből a mappa. Így az alapértelmezett
@@ -210,6 +218,23 @@ def build_summary_header(n_analyzed):
     )
 
 
+def build_summary_copy():
+    """A step_id/Cp/Cpk summary oszlopokat átmásolja egy külön, üres worksheetre.
+
+    Ez a futás LEGVÉGÉN fut le. Így a summary a saját "summary" nevű lapján lesz,
+    a nyers adat + az összes elemzés pedig a fő worksheeten marad (elmenthető,
+    átadható). A parancs pontosan az, amit a GUI generált (Data > Copy):
+      Copy 'step_id' 'Cp' 'Cpk';   -> mit másolunk
+        Newws "summary";           -> hova: ÚJ worksheet, "summary" néven
+        Varnames.                  -> az oszlopneveket is vigye át
+    """
+    return (
+        f"Copy '{COL_STEP_ID}' '{COL_CP}' '{COL_CPK}';\n"
+        f'  Newws "{SUMMARY_WORKSHEET}";\n'
+        "  Varnames.\n"
+    )
+
+
 def build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separator):
     """Összeállítja egy adott test_id-hez tartozó teljes Minitab blokkot, storage-dzsel.
 
@@ -332,6 +357,9 @@ def main():
         blocks.append(
             build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separator)
         )
+    # A legvégén a summary oszlopokat átmásoljuk egy külön "summary" worksheetre.
+    if n_analyzed:
+        blocks.append(build_summary_copy())
 
     # Az önálló exec: minden blokkot üres sorral elválasztva egyetlen fájlba.
     # Minitabban File > Run an Exec -> betölti az inline adatot, lefuttat minden
