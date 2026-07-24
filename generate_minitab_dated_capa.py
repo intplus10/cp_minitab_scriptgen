@@ -26,6 +26,7 @@ The two differences from the first tool are handled here:
 import argparse
 import csv
 import os
+import re
 import statistics
 import sys
 from collections import defaultdict
@@ -63,8 +64,13 @@ def detect_delimiter(sample_line):
 
 
 def parse_year_month(date_str):
-    """"2025.05.26" -> (2025, 5). A hónap vezető nulla NÉLKÜL (int)."""
-    parts = date_str.strip().split(".")
+    """"2025-05-26" / "2025.05.26" / "2025/05/26" -> (2025, 5).
+
+    A dátum-elválasztó lehet kötőjel, pont vagy perjel (a különböző exportok
+    máshogy formázzák), ezért bármelyikre bontunk. A hónap vezető nulla NÉLKÜL
+    (int), tehát 05 -> 5.
+    """
+    parts = re.split(r"[.\-/]", date_str.strip())
     return int(parts[0]), int(parts[1])
 
 
