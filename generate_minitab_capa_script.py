@@ -13,6 +13,8 @@ Session window (Edit > Command Line Editor).
 import argparse
 # csv: a bemeneti CSV fájl soronkénti, oszloponkénti beolvasásához.
 import csv
+# os: az elérési utak összefűzéséhez (a script saját könyvtárának megtalálásához).
+import os
 # statistics: a szórás (stdev) kiszámításához, hogy kiszűrhessük a 0 szórású lépéseket.
 import statistics
 # sys: kilépési kód (sys.exit) és a program futásának vezérléséhez.
@@ -40,6 +42,13 @@ except ImportError:
 # különben a következő Subset már csak az előző (leszűkített) táblát látná,
 # nem a teljes eredeti adatsort.
 SOURCE_WORKSHEET = "Worksheet 1"
+
+# A script saját könyvtára. A __file__ maga a jelenlegi .py fájl elérési útja;
+# abspath -> teljes (abszolút) útvonal, dirname -> ebből a mappa. Így az alapértelmezett
+# kimeneti fájl mindig a script MELLÉ kerül, függetlenül attól, honnan (melyik
+# munkakönyvtárból) indítjuk el a scriptet.
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DEFAULT_OUTPUT = os.path.join(SCRIPT_DIR, "minitab_capability_commands.txt")
 
 
 def prompt_csv_path():
@@ -204,8 +213,8 @@ def main():
         help="Path to the tall-table test-data CSV (omit to pick it via a file dialog)",
     )
     parser.add_argument(
-        "-o", "--output", default="minitab_capability_commands.txt",
-        help="Output .txt path (default: %(default)s)",
+        "-o", "--output", default=DEFAULT_OUTPUT,
+        help="Output .txt path (default: a script mellé, %(default)s)",
     )
     parser.add_argument(
         "--decimal-separator", choices=[",", "."],
