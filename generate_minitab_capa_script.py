@@ -68,6 +68,29 @@ COL_CP_TMP = "cp_tmp"     # temp: a Capa ide tárolja a Cp-t (1. sor)
 COL_CPK_TMP = "cpk_tmp"   # temp: a Capa ide tárolja a Cpk-t (1. sor)
 COL_FLAG_TMP = "flag_tmp" # temp: numerikus bukás-flag (0=PASS, 1-2=FAIL)
 
+# A summary + temp oszlopok EBBEN a sorrendben kapnak nevet a data oszlopok után
+# (C<N+1>, C<N+2>, ...). Egy helyen definiálva, hogy a header ne ismételgesse a
+# fix eltolásokat, és ne lehessen elcsúszni.
+HELPER_COLUMNS = [
+    COL_STEP_ID, COL_CP, COL_CPK, COL_RESULT,
+    COL_ID_TMP, COL_CP_TMP, COL_CPK_TMP, COL_FLAG_TMP,
+]
+
+# A summary <- temp párosítás: a Capa a temp oszlopokba tárol, innen másoljuk
+# LET-tel a summary megfelelő oszlopába (a step_id/Cp/Cpk értékeket).
+SUMMARY_FROM_TEMP = [
+    (COL_STEP_ID, COL_ID_TMP),
+    (COL_CP, COL_CP_TMP),
+    (COL_CPK, COL_CPK_TMP),
+]
+
+# A Capa parancs FIX (minden test_id-nél azonos) alparancsai, a limitek után és
+# a storage (Name/CP/CPK) előtt. A CStat-tal zárul, ami után jön a tárolás.
+CAPA_OPTIONS = [
+    "Pooled", "AMR", "UnBiased", "OBiased", "Toler 6",
+    "Within", "Overall", "NoCI", "PPM", "CStat",
+]
+
 # Kapabilitási határérték: FAIL, ha Cp VAGY Cpk ez alatt van.
 CAPABILITY_THRESHOLD = 1.33
 # A Minitab képletben ELKERÜLJÜK a tizedesjegyet: vesszős tizedes-beállításnál a
@@ -215,19 +238,14 @@ def build_summary_header(n_analyzed):
 
     A mérési adat a C1..C<N> oszlopokba kerül (N = elemzett test_id-k száma), ezért
     a summary/temp oszlopokat C<N+1>-től kezdve helyezzük, hogy ne ütközzenek az
-    adattal. A Name paranccsal előre elnevezzük őket, hogy a Capa storage és a LET
-    névre tudjon hivatkozni.
+    adattal. A Name paranccsal előre elnevezzük őket (a HELPER_COLUMNS sorrendben),
+    hogy a Capa storage és a LET névre tudjon hivatkozni.
     """
-    return (
-        f'Name C{n_analyzed + 1} "{COL_STEP_ID}"'
-        f' C{n_analyzed + 2} "{COL_CP}"'
-        f' C{n_analyzed + 3} "{COL_CPK}"'
-        f' C{n_analyzed + 4} "{COL_RESULT}"'
-        f' C{n_analyzed + 5} "{COL_ID_TMP}"'
-        f' C{n_analyzed + 6} "{COL_CP_TMP}"'
-        f' C{n_analyzed + 7} "{COL_CPK_TMP}"'
-        f' C{n_analyzed + 8} "{COL_FLAG_TMP}"\n'
+    columns = " ".join(
+        f'C{n_analyzed + offset} "{name}"'
+        for offset, name in enumerate(HELPER_COLUMNS, start=1)
     )
+    return f"Name {columns}\n"
 
 
 def build_summary_result():
@@ -330,11 +348,18 @@ def build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separ
     # A mérési értékeket a helyes tizedesjellel, szóközzel elválasztva soronként
     # VALUES_PER_LINE darabonként tördeljük (csak olvashatóság miatt).
     formatted = [format_number(v, decimal_separator) for v in raw_values]
-    data_lines = []
-    for i in range(0, len(formatted), VALUES_PER_LINE):
-        chunk = formatted[i:i + VALUES_PER_LINE]
-        data_lines.append("  " + " ".join(chunk))
-    data_block = "\n".join(data_lines)
+    data_block = "\n".join(
+        "  " + " ".join(formatted[i:i + VALUES_PER_LINE])
+        for i in range(0, len(formatted), VALUES_PER_LINE)
+    )
+
+    # A Capa fix alparancsai (Pooled..CStat), majd a storage a temp oszlopokba.
+    options_block = "".join(f"  {opt};\n" for opt in CAPA_OPTIONS)
+    # A temp 1. sorát a summary <index>. sorába másoljuk (step_id/Cp/Cpk).
+    let_block = "".join(
+        f"LET '{summary}'({index}) = '{temp}'(1)\n"
+        for summary, temp in SUMMARY_FROM_TEMP
+    )
 
     return (
         f"SET {column}\n"
@@ -344,23 +369,49 @@ def build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separ
         f"Capa 'P_{test_id}' 1;\n"
         f"  Lspec {lsl};\n"
         f"  Uspec {usl};\n"
-        "  Pooled;\n"
-        "  AMR;\n"
-        "  UnBiased;\n"
-        "  OBiased;\n"
-        "  Toler 6;\n"
-        "  Within;\n"
-        "  Overall;\n"
-        "  NoCI;\n"
-        "  PPM;\n"
-        "  CStat;\n"
+        f"{options_block}"
         f"  Name '{COL_ID_TMP}';\n"
         f"  CP '{COL_CP_TMP}';\n"
         f"  CPK '{COL_CPK_TMP}'.\n"
-        f"LET '{COL_STEP_ID}'({index}) = '{COL_ID_TMP}'(1)\n"
-        f"LET '{COL_CP}'({index}) = '{COL_CP_TMP}'(1)\n"
-        f"LET '{COL_CPK}'({index}) = '{COL_CPK_TMP}'(1)\n"
+        f"{let_block}"
     )
+
+
+def select_analyzable(order, values, limits, decimal_separator):
+    """Kiválasztja az elemzendő test_id-ket, és összeállítja a hozzájuk tartozó adatot.
+
+    Kihagyja azokat a lépéseket, amiknek nincs értelmes capability analysisük:
+      - kevesebb mint 2 mérési pont (szórás sem számolható),
+      - 0 szórás (minden érték ugyanaz, pl. egy pass/fail flag).
+
+    Visszaad:
+      analyzed - (test_id, raw_values, lsl, usl) tuple-ök, a formázott limitekkel
+      skipped_zero_std     - a 0 szórás miatt kihagyott test_id-k
+      skipped_no_variance  - a <2 pont miatt kihagyott test_id-k
+    """
+    analyzed = []
+    skipped_zero_std = []
+    skipped_no_variance = []
+
+    for test_id in order:
+        # A nyers string értékeket float()-oljuk, hogy szórást tudjunk számolni.
+        numeric = [float(v) for v in values[test_id]]
+        if len(numeric) < 2:
+            skipped_no_variance.append(test_id)
+            continue
+        if statistics.stdev(numeric) == 0:
+            skipped_zero_std.append(test_id)
+            continue
+
+        lower_raw, upper_raw = limits[test_id]
+        analyzed.append((
+            test_id,
+            values[test_id],
+            format_number(lower_raw, decimal_separator),
+            format_number(upper_raw, decimal_separator),
+        ))
+
+    return analyzed, skipped_zero_std, skipped_no_variance
 
 
 def launch_minitab(mtb_path):
@@ -413,39 +464,17 @@ def main():
 
     order, values, limits = load_test_steps(csv_path)
 
-    # 1. MENET: eldöntjük, mely test_id-k kerülnek elemzésre (a 0 szórásúakat
-    # kihagyjuk), és összegyűjtjük a szükséges adatokat. Azért külön menetben,
-    # mert a summary/temp oszlopok helyéhez előre tudni kell az elemzett
-    # test_id-k SZÁMÁT (N), hogy a data oszlopok (C1..C<N>) után helyezzük őket.
-    skipped_zero_std = []
-    skipped_no_variance = []
-    analyzed = []   # (test_id, raw_values, lsl, usl) az elemzendő lépésekhez
-
-    for test_id in order:
-        # A nyers string értékeket float()-oljuk, hogy szórást tudjunk számolni.
-        test_values = [float(v) for v in values[test_id]]
-        if len(test_values) < 2:
-            # Szórást csak legalább 2 adatpontból lehet számolni.
-            skipped_no_variance.append(test_id)
-            continue
-        std = statistics.stdev(test_values)
-        if std == 0:
-            # Ez a lényegi szűrés: ha minden mérési érték ugyanaz (pl. egy
-            # pass/fail flag, ami mindig 1.0), nincs értelme capability
-            # analysisnek, ezért kihagyjuk ezt a test_id-t.
-            skipped_zero_std.append(test_id)
-            continue
-
-        lower_raw, upper_raw = limits[test_id]
-        lsl = format_number(lower_raw, decimal_separator)
-        usl = format_number(upper_raw, decimal_separator)
-        analyzed.append((test_id, values[test_id], lsl, usl))
-
+    # Kiválasztjuk az elemzendő test_id-ket (a <2 pontos és 0 szórású lépések
+    # kimaradnak). Előre kell az N (elemzett darabszám), mert a summary/temp
+    # oszlopok a data oszlopok (C1..C<N>) UTÁN kapnak helyet.
+    analyzed, skipped_zero_std, skipped_no_variance = select_analyzable(
+        order, values, limits, decimal_separator
+    )
     n_analyzed = len(analyzed)
 
-    # 2. MENET: a parancsblokkok összeállítása. A summary/temp oszlopok neveit
-    # a header hozza létre (a data oszlopok után), majd minden blokk a saját
-    # C<index> oszlopába teszi az adatot és a summary <index>. sorába az eredményt.
+    # A parancsblokkok összeállítása. A summary/temp oszlopok neveit a header
+    # hozza létre (a data oszlopok után), majd minden blokk a saját C<index>
+    # oszlopába teszi az adatot és a summary <index>. sorába az eredményt.
     blocks = [build_summary_header(n_analyzed)]
     for index, (test_id, raw_values, lsl, usl) in enumerate(analyzed, start=1):
         column = f"C{index}"
