@@ -288,6 +288,20 @@ def build_summary_print():
     return f"Print '{COL_STEP_ID}' '{COL_CP}' '{COL_CPK}' '{COL_RESULT}'.\n"
 
 
+def build_export_xword():
+    """A teljes eredményt (minden legenerált grafikon + a Session szöveges
+    kimenete, benne a summary tábla) Wordbe exportálja.
+
+    Az XWORD a Minitab egyszerű, argumentum nélküli export-parancsa: egy Word
+    dokumentumba teszi a projekt tartalmát a LÉTREHOZÁS sorrendjében. Ezért a
+    legvégén fut — ekkorra már minden capa chart és a summary Print is megvan,
+    így a Word-report egyetlen paranccsal, kézi "Send to Report" nélkül elkészül.
+    (A summary a végére kerül, mert csak az összes elemzés után áll elő — ez így
+    elfogadott.)
+    """
+    return "XWORD\n"
+
+
 def build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separator,
                      target=None):
     """Összeállítja egy adott test_id-hez tartozó teljes Minitab blokkot, storage-dzsel.
@@ -388,6 +402,8 @@ def build_exec_text(analyzed, decimal_separator, target=None):
         blocks.append(build_summary_result())
         blocks.append(build_summary_copy())
         blocks.append(build_summary_print())
+        # A legvégén: minden chart + a Session (summary) Wordbe exportálása.
+        blocks.append(build_export_xword())
 
     return "\n".join(blocks)
 
