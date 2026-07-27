@@ -302,8 +302,7 @@ def build_export_xword():
     return "XWORD\n"
 
 
-def build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separator,
-                     target=None):
+def build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separator):
     """Összeállítja egy adott test_id-hez tartozó teljes Minitab blokkot, storage-dzsel.
 
     A blokk lépései:
@@ -327,8 +326,6 @@ def build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separ
     nem kell worksheet-váltogatás, és nincs esély a táblák "összekeveredésére".
 
     index: 1-alapú sorszám (egyben a data oszlop C<index> ÉS a summary sor is).
-    target: opcionális célérték (Target subcommand). None esetén nincs Target sor
-            (így a mostani, test_id-alapú tool kimenete változatlan marad).
     """
     # A mérési értékeket a helyes tizedesjellel, szóközzel elválasztva soronként
     # VALUES_PER_LINE darabonként tördeljük (csak olvashatóság miatt).
@@ -339,9 +336,6 @@ def build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separ
         data_lines.append("  " + " ".join(chunk))
     data_block = "\n".join(data_lines)
 
-    # Opcionális Target (célérték) alparancs — csak ha meg van adva.
-    target_line = f"  Target {target};\n" if target is not None else ""
-
     return (
         f"SET {column}\n"
         f"{data_block}\n"
@@ -350,7 +344,6 @@ def build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separ
         f"Capa 'P_{test_id}' 1;\n"
         f"  Lspec {lsl};\n"
         f"  Uspec {usl};\n"
-        f"{target_line}"
         "  Pooled;\n"
         "  AMR;\n"
         "  UnBiased;\n"
@@ -368,44 +361,6 @@ def build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separ
         f"LET '{COL_CP}'({index}) = '{COL_CP_TMP}'(1)\n"
         f"LET '{COL_CPK}'({index}) = '{COL_CPK_TMP}'(1)\n"
     )
-
-
-def build_exec_text(analyzed, decimal_separator, target=None):
-    """A teljes .mtb exec szövegét állítja össze az elemzendő csoportokból.
-
-    Ez a KÖZÖS motor: mindkét tool (test_id-alapú ÉS dátum/állomás/paraméter-alapú)
-    ezt hívja, csak az `analyzed` lista előállítása különbözik. Így a Capa +
-    summary + PASS/FAIL logika EGY helyen él.
-
-    analyzed: (name, raw_values, lsl, usl) tuple-ök listája. A `name` lesz az
-              oszlop/elemzés neve (a Capa címe), a raw_values a mérési értékek
-              (nyers string), lsl/usl a már formázott (helyes tizedesjelű) limitek.
-    target:   opcionális közös célérték (Target subcommand) minden blokkhoz.
-
-    Visszaadja a kész exec szövegét (string).
-    """
-    n_analyzed = len(analyzed)
-
-    # A summary/temp oszlopok neveit a header hozza létre (a data oszlopok után),
-    # majd minden blokk a saját C<index> oszlopába teszi az adatot és a summary
-    # <index>. sorába az eredményt.
-    blocks = [build_summary_header(n_analyzed)]
-    for index, (name, raw_values, lsl, usl) in enumerate(analyzed, start=1):
-        column = f"C{index}"
-        blocks.append(
-            build_capa_block(index, name, raw_values, lsl, usl, column,
-                             decimal_separator, target=target)
-        )
-    # A loop után: PASS/FAIL verdict, majd a summary átmásolása külön worksheetre
-    # és Print a Session ablakba (a kézi Word-exporthoz).
-    if n_analyzed:
-        blocks.append(build_summary_result())
-        blocks.append(build_summary_copy())
-        blocks.append(build_summary_print())
-        # A legvégén: minden chart + a Session (summary) Wordbe exportálása.
-        blocks.append(build_export_xword())
-
-    return "\n".join(blocks)
 
 
 def launch_minitab(mtb_path):
@@ -488,10 +443,27 @@ def main():
 
     n_analyzed = len(analyzed)
 
-    # 2. MENET: a KÖZÖS motor összeállítja a teljes exec szövegét, és kiírjuk.
-    exec_text = build_exec_text(analyzed, decimal_separator)
+    # 2. MENET: a parancsblokkok összeállítása. A summary/temp oszlopok neveit
+    # a header hozza létre (a data oszlopok után), majd minden blokk a saját
+    # C<index> oszlopába teszi az adatot és a summary <index>. sorába az eredményt.
+    blocks = [build_summary_header(n_analyzed)]
+    for index, (test_id, raw_values, lsl, usl) in enumerate(analyzed, start=1):
+        column = f"C{index}"
+        blocks.append(
+            build_capa_block(index, test_id, raw_values, lsl, usl, column, decimal_separator)
+        )
+    # A loop után: kiszámoljuk a PASS/FAIL verdict oszlopot, a summaryt átmásoljuk
+    # egy külön "summary" worksheetre, Print-tel a Session ablakba is kiírjuk, végül
+    # XWORD-del az egészet (chartok + summary) Wordbe exportáljuk.
+    if n_analyzed:
+        blocks.append(build_summary_result())
+        blocks.append(build_summary_copy())
+        blocks.append(build_summary_print())
+        blocks.append(build_export_xword())
+
+    # Az önálló exec: minden blokkot üres sorral elválasztva egyetlen fájlba.
     with open(args.output, "w", encoding="utf-8") as f:
-        f.write(exec_text)
+        f.write("\n".join(blocks))
 
     total = len(order)
     print(f"Total test_id steps found:       {total}")
